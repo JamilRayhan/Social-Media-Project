@@ -1,7 +1,6 @@
 {% extends 'base.html' %}
 {% load crispy_forms_tags %}
 {% block title_block %}{{title}}{% endblock  %}
-{% block body_block %}
 
 {% block css_block %}
 <style>
@@ -21,13 +20,15 @@
     }
 </style>
 {% endblock  %}
+
+{% block body_block %}
 <center>
 <div class="log_in">
     <h4 class="text">Login to connect and share.</h4>
 <form method='POST'>
     {{form|crispy}}
     {% csrf_token %}
-    <button type="submit" style="width:100%" class="btn btn-primary btn-sm">Create Account</button>
+    <button type="submit" style="width:100%" class="btn btn-primary btn-sm">Log In</button>
 </form>
 </div>
 <div class="sign_up">
