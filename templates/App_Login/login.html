@@ -1,13 +1,13 @@
 {% extends 'base.html' %}
 {% load crispy_forms_tags %}
-{% block title_block %}Create New Account{% endblock  %}
+{% block title_block %}{{title}}{% endblock  %}
+{% block body_block %}
 
 {% block css_block %}
 <style>
     .sign_up{
         width: 50%;
-        border: 1px solid #ccc;
-        border-radius: 10px;
+        
         padding: 20px;
     }
     .text{
@@ -16,24 +16,22 @@
     .log_in{
         width: 50%;
         padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 10px;
     }
 </style>
 {% endblock  %}
-
-{% block body_block %}
-
 <center>
-<div class="sign_up">
-    <h4 class="text">This site will helps you connect and share with the people in your life.</h4>
+<div class="log_in">
+    <h4 class="text">Login to connect and share.</h4>
 <form method='POST'>
     {{form|crispy}}
     {% csrf_token %}
     <button type="submit" style="width:100%" class="btn btn-primary btn-sm">Create Account</button>
 </form>
 </div>
-<div class="log_in">
-    <p>Have an account? <a href="{% url 'App_Login:login' %}">Login</a></p>
+<div class="sign_up">
+    <p>Don't have an account? <a href="{% url 'App_Login:signup' %}">Sign up</a></p>
 </div>
 </center>
 {% endblock  %}
-
