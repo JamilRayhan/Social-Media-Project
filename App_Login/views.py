@@ -47,11 +47,15 @@ def edit_profile(request):
         if form.is_valid():
             form.save(commit=True)
             form=EditProfile(instance=current_user)
-            
-            return HttpResponseRedirect(reverse('App_Login:login'))
+            return HttpResponseRedirect(reverse('App_Login:profile'))
     return render(request,'App_Login/profile.html',context={'form':form,'title':'Edit Profile . Social'})
 
 @login_required
 def logout_user(request):
     logout(request)
     return HttpResponseRedirect(reverse('App_Login:login'))
+
+
+@login_required
+def profile(request):
+    return render(request, 'App_Login/user.html', context={'title':request.user.username})

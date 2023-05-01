@@ -1,0 +1,29 @@
+{% extends 'navbar.html' %}
+{% load crispy_forms_tags %}
+{% block title_block %}{{title}}{% endblock  %}
+
+{% block css_block %}
+
+{% endblock  %}
+
+{% block body_block %}
+    <div class="row">
+        <div class="col-sm-4">
+            {% if user.user_profile.profile_pic %}
+            <a class="dropdown-item" href=""><img src="/media/{{user.user_profile.profile_pic}}" width= '250px' height="250px" class="rounded-circle"> </a>
+            {% else %}
+            <a class="dropdown-item" href=""><img src="/media/default.png" width= '250px' height="250px" class="rounded-circle"></a>
+            {% endif %}
+        
+        </div>
+        <div class="col-sm-8">
+            <h3>{{ user.username }} &nbsp; <a href="{% url 'App_Login:edit' %}" class="btn btn-light btn-sm">Edit Profile</a></h3>
+            <br>
+            <h4>{{user.post.count}} Posts &nbsp; &nbsp; {{user.following.count}} Followers &nbsp; &nbsp; {{user.follower.count}} Following</h4>
+            <br>
+            <h4>{{user.user_profile.full_name}}</h4>
+            <h6>{{user.user_profile.description|linebreaks}}</h6>
+        </div>
+    </div>
+    <hr>
+{% endblock  %}
