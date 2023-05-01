@@ -31,9 +31,15 @@
           <a class="nav-link" href="#">Link</a>
         </li>  
         <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Dropdown</a>
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">@{{user.username}}</a>
           <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="#">Link</a></li>
+            <li>
+              {% if user.user_profile.profile_pic %}
+              <a class="dropdown-item" href="#"><img src="/media/{{user.user_profile.profile_pic}}" width= '40px' height="40px" class="rounded-circle"></a>
+              {% else %}
+              <a class="dropdown-item" href="#"><img src="/media/default.png" width= '40px' height="40px" class="rounded-circle"></a>
+              {% endif %}
+            </li>
             <li><a class="dropdown-item" href="#">Another link</a></li>
             <li><a class="dropdown-item" href="{% url 'App_Login:logout' %}">Logout</a></li>
           </ul>

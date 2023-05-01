@@ -29,7 +29,7 @@ class AuthForm(AuthenticationForm):
     password= forms.CharField(
         required=True, 
         label="",
-        widget=forms.PasswordInput(attrs={'placeholder':'New Password'}))
+        widget=forms.PasswordInput(attrs={'placeholder':'Password'}))
     class Meta:
         model= User
         fields= ('username','password')

@@ -8,3 +8,9 @@ class UserProfile(models.Model):
     dob = models.DateField(blank=True,null=True)
     website=models.URLField(blank=True)
     facebook = models.URLField(blank=True)
+    
+
+class Follow(models.Model):
+    follower = models.ForeignKey(User, related_name='follower', on_delete=models.CASCADE)
+    following = models.ForeignKey(User, related_name='following', on_delete=models.CASCADE)
+    created_date = models.DateTimeField(auto_now_add=True)
