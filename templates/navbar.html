@@ -23,10 +23,12 @@
       <ul class="navbar-nav ">
 
         &nbsp;&nbsp;&nbsp;&nbsp;
-        <form class="d-flex" method= "GET">
-          <input class="form-control me-2" name="search" type="text" placeholder="Search">
-          <button class="btn btn-primary" type="button">Search</button>
-        </form>
+        <form method="get" action="{% url 'App_Post:home' %}">
+          <div class="input-group mb-3">
+              <input type="text" class="form-control" placeholder="Search for posts" name="search">
+              <button class="btn btn-primary" type="submit">Search</button>
+          </div>
+      </form>
 
         <li class="nav-item">
           <a class="nav-link" href="{% url 'App_Post:home' %}">Home</a>

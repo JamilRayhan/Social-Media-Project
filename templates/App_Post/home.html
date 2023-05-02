@@ -7,5 +7,17 @@
 {% endblock  %}
 
 {% block body_block %}
-<h1>Homepage</h1>
-{% endblock  %}
+    {% for user in result  %}
+        <div class="row">
+            <div class="col-sm-1">
+                <a class="dropdown-item" href="{% url 'App_Login:profile' %}"><img src="/media/{{user.user_profile.profile_pic}}" width= '50px' height="50px"></a>
+            </div>
+            <div class="col-sm-11"> 
+                @{{user.username}} <br>
+                {{user.user_profile.full_name}}
+            </div>
+        </div>
+        
+       
+    {% endfor %}
+{% endblock %}
