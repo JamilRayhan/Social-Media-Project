@@ -25,9 +25,13 @@
     <div class="row">
         <div class="col-sm-4">
             {% if user.user_profile.profile_pic %}
-            <a class="dropdown-item" href=""><img src="/media/{{user.user_profile.profile_pic}}" width= '250px' height="250px" class="rounded-circle"> </a>
+            <a class="dropdown-item" href="">
+              <img src="/media/{{user.user_profile.profile_pic}}" width= '250px' height="250px" class="rounded-circle"> 
+            </a>
             {% else %}
-            <a class="dropdown-item" href=""><img src="/media/default.png" width= '250px' height="250px" class="rounded-circle"></a>
+            <a class="dropdown-item" href="">
+              <img src="/media/default.png" width= '250px' height="250px" class="rounded-circle">
+            </a>
             {% endif %}
         
         </div>
@@ -79,8 +83,16 @@
     <div class="row">
         {% for post in user.post.all %}
             <div>
-                <a class="dropdown-item" href="{% url 'App_Login:profile' %}"><img src="/media/{{user.user_profile.profile_pic}}" width= '40px' height="40px" class="rounded-circle">{{user.username}}</a>
-                <br>
+              {% if user.user_profile.profile_pic %}
+            <a class="dropdown-item" href="">
+              <img src="/media/{{user.user_profile.profile_pic}}" width= '40px' height="40px" class="rounded-circle"> {{user.username}}
+            </a>
+            {% else %}
+            <a class="dropdown-item" href="">
+              <img src="/media/default.png" width= '40px' height="40px" class="rounded-circle"> {{user.username}}
+            </a>
+            {% endif %}
+              <br>
             </div>
           <div class="crop">
             <img src="/media/{{post.image}}" class="" title="{{post.caption}}">

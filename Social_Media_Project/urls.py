@@ -6,7 +6,7 @@ from App_Post import views
 urlpatterns = [
     path('', views.home,name='home'),
     path('admin/', admin.site.urls),
-    path('account/',include('App_Login.urls')),
+    path('accounts/',include('App_Login.urls')),
     path('post/',include('App_Post.urls')),
 ]
 urlpatterns += staticfiles_urlpatterns()
