@@ -1,0 +1,70 @@
+{% extends 'navbar.html' %}
+{% load crispy_forms_tags %}
+{% block title_block %}{{title}}{% endblock  %}
+
+{% block css_block %}
+    <style>
+        .crop{
+            width: 400px;
+            height: 400px;
+            overflow: hidden;
+            position: relative;
+        }
+        .crop img{
+            max-width: 100%;
+            max-height: 100%;
+            width: auto;
+            height: auto;
+            display: block;
+            margin: auto;
+        }
+    </style>
+{% endblock  %}
+
+{% block body_block %}
+    <div class="row">
+        <div class="col-sm-4">
+            {% if user_other.user_profile.profile_pic %}
+            <a class="dropdown-item" href="">
+              <img src="/media/{{user_other.user_profile.profile_pic}}" width= '250px' height="250px" class="rounded-circle"> 
+            </a>
+            {% else %}
+            <a class="dropdown-item" href="">
+              <img src="/media/default.png" width= '250px' height="250px" class="rounded-circle">
+            </a>
+            {% endif %}
+        
+        </div>
+        <div class="col-sm-8">
+            <h3>{{ user_other.username }} &nbsp; <a href="" class="btn btn-light btn-sm">Follow</a></h3>
+            <br>
+            <h4>{{user_other.post.count}} Posts &nbsp; &nbsp; {{user_other.following.count}} Followers &nbsp; &nbsp; {{user_other.follower.count}} Following</h4>
+            <br>
+            <h4>{{user_other.user_profile.full_name}}</h4>
+            <h6>{{user_other.user_profile.description|linebreaks}}</h6>
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        {% for post in user_other.post.all %}
+            <div>
+              {% if user_other.user_profile.profile_pic %}
+              <a  href="">
+                <img src="/media/{{user_other.user_profile.profile_pic}}" width= '40px' height="40px" class="rounded-circle"> {{user_other.username}}
+              </a>
+              {% else %}
+              <a  href="">
+                <img src="/media/default.png" width= '40px' height="40px" class="rounded-circle"> {{user_other.username}}
+              </a>
+              {% endif %}
+              <br>
+            </div>
+          <div class="crop">
+            <img src="/media/{{post.image}}" class="" title="{{post.caption}}">
+            <p>{{post.caption}}</p>
+          </div>
+          <br>
+        {% endfor %}
+    </div>
+    <br><br>
+{% endblock  %} 

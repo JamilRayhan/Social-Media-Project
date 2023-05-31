@@ -23,9 +23,10 @@
       <ul class="navbar-nav ">
 
         &nbsp;&nbsp;&nbsp;&nbsp;
-        <form method="get" action="{% url 'App_Post:home' %}">
+        
+        <form class="form-inline" method="get" action="{% url 'App_Post:home' %}">
           <div class="input-group mb-3">
-              <input type="text" class="form-control" placeholder="Search for posts" name="search">
+              <input type="text" class="form-control" placeholder="Search.." name="search">
               <button class="btn btn-primary" type="submit">Search</button>
           </div>
       </form>

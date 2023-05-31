@@ -84,14 +84,14 @@
         {% for post in user.post.all %}
             <div>
               {% if user.user_profile.profile_pic %}
-            <a class="dropdown-item" href="">
-              <img src="/media/{{user.user_profile.profile_pic}}" width= '40px' height="40px" class="rounded-circle"> {{user.username}}
-            </a>
-            {% else %}
-            <a class="dropdown-item" href="">
-              <img src="/media/default.png" width= '40px' height="40px" class="rounded-circle"> {{user.username}}
-            </a>
-            {% endif %}
+              <a  href="">
+                <img src="/media/{{user.user_profile.profile_pic}}" width= '40px' height="40px" class="rounded-circle"> {{user.username}}
+              </a>
+              {% else %}
+              <a  href="">
+                <img src="/media/default.png" width= '40px' height="40px" class="rounded-circle"> {{user.username}}
+              </a>
+              {% endif %}
               <br>
             </div>
           <div class="crop">
