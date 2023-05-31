@@ -4,5 +4,7 @@ app_name= 'App_Post'
 
 urlpatterns = [
     path('', views.home,name='home'),
+    path('liked/<pk>', views.liked,name='liked'),
+    path('unlike/<pk>', views.unlike,name='unlike'),
     
 ]

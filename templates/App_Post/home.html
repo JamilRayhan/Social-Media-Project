@@ -56,7 +56,15 @@
               
             </div>
             <img src="/media/{{ post.image }}" width="100%">
-            
+            <div style="padding:20px">
+              {% if post.pk in liked_post_list %}
+              <a href="{% url 'App_Post:unlike' pk=post.pk %}"><i class="fa fa-heart" style="font-size: 36px;"></i></a>
+                
+              {%else%}
+              <a href="{% url 'App_Post:liked' pk=post.pk %}"><i class="fa fa-heart-o" style="font-size: 36px;"></i></a>
+              {% endif %}
+              <br>{{post.liked_post.count}} Likes
+            </div>
           </div>
           <br><br>
         {% endfor %}
@@ -64,14 +72,14 @@
     
     <div class="col-sm-3">
       <div class="row">
-        <div class="col-sm-4">
+        <div class="col-sm-6">
           {% if user.user_profile.profile_pic %}
-            <img src="/media/{{ user.user_profile.profile_pic }}" width="100%" height="100%" class="rounded-circle">
+            <img src="/media/{{ user.user_profile.profile_pic }}" width="100%" height="100%" class="">
           {% else %}
-            <img src="/media/default.png" width="100%" height="100%" class="rounded-circle">
+            <img src="/media/default.png" width="100%" height="100%" class="">
           {% endif %}
         </div>
-        <div class="col-sm-8">
+        <div class="col-sm-6">
           {{ user.username }}
           <br>
           {{ user.user_profile.full_name }}
