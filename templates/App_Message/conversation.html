@@ -1,0 +1,54 @@
+{% extends 'navbar.html' %}
+{% load crispy_forms_tags %}
+
+{% block title_block %}Conversation{% endblock %}
+
+{% block css_block %}
+<style>
+    .sent {
+        text-align: right;
+    }
+
+    .received {
+        text-align: left;
+    }
+
+    .other_user {
+        text-align: center;
+    }
+
+    .profile-pic {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+    }
+</style>
+{% endblock %}
+
+{% block body_block %}
+<h1 class="other_user">{{ user2.username }}</h1>
+
+{% for message in messages %}
+    {% if message.sender == user1 %}
+        <div class="message sent">
+            <p>{{ message.content }} {% if message.sender.user_profile.profile_pic %}<img src="{{message.sender.user_profile.profile_pic.url }}" alt="Profile Pic" class="profile-pic">{% endif %}</p>
+            <span>{{ message.timestamp }}</span>
+        </div>
+    {% else %}
+        <div class="message received">
+            <p>{% if message.sender.user_profile.profile_pic %}<img src="{{message.sender.user_profile.profile_pic.url }}" alt="Profile Pic" class="profile-pic">{% endif %}
+           {{ message.content }}</p>
+            <span>{{ message.timestamp }}</span>
+        </div>
+    {% endif %}
+{% endfor %}
+
+<hr>
+
+<form method="POST">
+    {% csrf_token %}
+    {{ reply_form|crispy }}
+    <button type="submit" class="btn btn-primary">Reply</button>
+</form>
+
+{% endblock %}

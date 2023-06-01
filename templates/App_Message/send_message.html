@@ -1,0 +1,20 @@
+{% extends 'navbar.html' %}
+{% load crispy_forms_tags %}
+{% block title_block %}{{title}}{% endblock  %}
+
+{% block css_block %}
+
+{% endblock  %}
+
+{% block body_block %}
+  <h1>Send Message</h1>
+  
+  <form method="post">
+    {% csrf_token %}
+    
+    {{ msg_form.as_p }}
+    
+    <button type="submit">Send</button>
+  </form>
+  
+{% endblock %}
