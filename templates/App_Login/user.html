@@ -81,25 +81,28 @@
     </div>
     <br>
     <div class="row">
-        {% for post in user.post.all %}
-            <div>
+      {% for post in user.post.all %}
+          <div>
               {% if user.user_profile.profile_pic %}
-              <a  href="">
-                <img src="/media/{{user.user_profile.profile_pic}}" width= '40px' height="40px" class="rounded-circle"> {{user.username}}
-              </a>
+                  <a href="">
+                      <img src="/media/{{user.user_profile.profile_pic}}" width="40px" height="40px" class="rounded-circle"> {{user.username}}
+                  </a>
               {% else %}
-              <a  href="">
-                <img src="/media/default.png" width= '40px' height="40px" class="rounded-circle"> {{user.username}}
-              </a>
+                  <a href="">
+                      <img src="/media/default.png" width="40px" height="40px" class="rounded-circle"> {{user.username}}
+                  </a>
               {% endif %}
               <br>
-            </div>
+          </div>
           <div class="crop">
             <img src="/media/{{post.image}}" class="" title="{{post.caption}}">
             <p>{{post.caption}}</p>
-          </div>
+            <div style="padding: 20px;">
+                <br>{{ post.liked_post.count }} Likes
+            </div>
+        </div>
           <br>
-        {% endfor %}
-    </div>
+      {% endfor %}
+  </div>
     <br><br>
 {% endblock  %} 
