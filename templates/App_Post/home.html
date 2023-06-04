@@ -64,6 +64,21 @@
               {% endif %}
               <br>{{ post.liked_post.count }} Likes
             </div>
+            
+            <!-- Add Comment Section -->
+            <div>
+              <form method="POST" action="{% url 'App_Post:add_comment' post_id=post.pk %}">
+                {% csrf_token %}
+                <textarea name="content" placeholder="Write a comment..." rows="2"></textarea>
+                <button type="submit" class="btn btn-primary">Comment</button>
+              </form>
+              {% for comment in post.comments.all %}
+                <div>
+                  <strong>{{ comment.author.username }}</strong>: {{ comment.content }} <br>
+                  {{comment.timestamp}}
+                </div>
+              {% endfor %}
+            </div>
           </div>
           <br><br>
         {% endfor %}

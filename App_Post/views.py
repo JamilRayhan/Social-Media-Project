@@ -1,8 +1,8 @@
-from django.shortcuts import HttpResponse,HttpResponseRedirect,render
+from django.shortcuts import HttpResponse,HttpResponseRedirect, redirect,render
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 from App_Login.models import UserProfile,Follow
-from App_Post.models import Posts,Like
+from App_Post.models import Posts,Like,Comment
 from django.contrib.auth.models import User
 # Create your views here.
 @login_required
@@ -31,3 +31,16 @@ def unlike(request,pk):
     already_liked=Like.objects.filter(post=post,user=request.user)
     already_liked.delete()
     return HttpResponseRedirect(reverse('home'))
+
+@login_required
+def add_comment(request, post_id):
+    if request.method == 'POST':
+        post = Posts.objects.get(pk=post_id)
+        author = request.user
+        content = request.POST['content']
+
+        comment = Comment(post=post, author=author, content=content)
+        comment.save()
+        return redirect('App_Post:home')
+
+    return render(request, 'App_Post/home.html')

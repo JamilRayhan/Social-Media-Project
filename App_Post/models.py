@@ -22,4 +22,17 @@ class Like(models.Model):
     def __str__(self):
         return '{}:{}'.format(self.user,self.post)
     
+    
+class Comment(models.Model):
+    post = models.ForeignKey(Posts, on_delete=models.CASCADE, related_name='comments')
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    content = models.TextField()
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-timestamp']
+        
+    def __str__(self):
+        return f'Comment by {self.author} on {self.post}'
+    
 
