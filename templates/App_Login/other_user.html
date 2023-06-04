@@ -71,6 +71,17 @@
             <p>{{post.caption}}</p>
           </div>
           <br>
+          {% for comment in post.comments.all %}
+          <li>
+              <a href="{% url 'App_Login:user' username=comment.author %}">{{ comment.author }}</a>: {{ comment.content}}
+              <br>
+              at: {{ comment.timestamp }}
+              <br>
+          </li>
+          {% empty %}
+          <li>Not comment yet.</li>
+          {% endfor %}
+          <br>
         {% endfor %}
     </div>
     <br><br>

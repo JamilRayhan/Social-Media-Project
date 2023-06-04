@@ -101,6 +101,16 @@
                 <br>{{ post.liked_post.count }} Likes
             </div>
         </div>
+          {% for comment in post.comments.all %}
+          <li>
+              <a href="{% url 'App_Login:user' username=comment.author %}">{{ comment.author }}</a>: {{ comment.content}}
+              <br>
+              {{ comment.timestamp }}
+              <br>
+          </li>
+          {% empty %}
+          <li>Not Comment yet.</li>
+          {% endfor %}
           <br>
       {% endfor %}
   </div>
