@@ -1,0 +1,29 @@
+{% extends 'navbar.html' %}
+{% load crispy_forms_tags %}
+{% block title_block %}Notifications{% endblock %}
+
+{% block css_block %}
+
+{% endblock %}
+
+{% block body_block %}
+  <h2>Notifications</h2>
+  
+  {% if notifications %}
+    <ul>
+      {% for notification in notifications %}
+        <li>
+          {% if notification.liked_by %}
+            User {{ notification.liked_by.username }} liked your post.
+          {% endif %}
+          
+          {% if notification.commented_by %}
+            User {{ notification.commented_by.username }} commented on your post.
+          {% endif %}
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>No new notifications.</p>
+  {% endif %}
+{% endblock %}

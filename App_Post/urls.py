@@ -7,5 +7,6 @@ urlpatterns = [
     path('', views.home, name='home'),
     path('liked/<pk>', views.liked, name='liked'),
     path('unlike/<pk>', views.unlike, name='unlike'),
-    path('add_comment/<post_id>', views.add_comment, name='add_comment'),  # Add this line
+    path('add_comment/<post_id>', views.add_comment, name='add_comment'),  
+    path('notifications/', views.notifications, name='notifications'),
 ]
