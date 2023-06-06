@@ -7,23 +7,24 @@
 {% endblock %}
 
 {% block body_block %}
-  <h2>Notifications</h2>
-  
-  {% if notifications %}
-    <ul>
-      {% for notification in notifications %}
-        <li>
-          {% if notification.liked_by %}
-            User {{ notification.liked_by.username }} liked your post.
-          {% endif %}
-          
-          {% if notification.commented_by %}
-            User {{ notification.commented_by.username }} commented on your post.
-          {% endif %}
-        </li>
-      {% endfor %}
-    </ul>
-  {% else %}
-    <p>No new notifications.</p>
-  {% endif %}
+  <h1>Notifications</h1>
+    {% if notifications %}
+      <ul>
+        {% for notification in notifications %}
+          <li>
+            {% if notification.notification_type == 'Like' %}
+                <strong>{{ notification.target.username }}</strong> liked your post.
+            {% elif notification.notification_type == 'Comment' %}
+                <strong>{{ notification.target.username }}</strong> commented on your post.
+            {% elif notification.notification_type == 'Follow' %}
+              <a href="{% url 'App_Login:user' username=notification.target.username %}">
+                <strong>{{ notification.target.username }}</strong> started following you.
+              </a>
+            {% endif %}
+          </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p>No notifications found.</p>
+    {% endif %}
 {% endblock %}

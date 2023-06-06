@@ -35,16 +35,14 @@ class Comment(models.Model):
     def __str__(self):
         return f'Comment by {self.author} on {self.post}'
     
-class Notification(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    post = models.ForeignKey(Posts, on_delete=models.CASCADE)
-    liked_by = models.ForeignKey(User, related_name='liked_notifications', on_delete=models.CASCADE)
-    commented_by = models.ForeignKey(User, related_name='commented_notifications', on_delete=models.CASCADE)
-    timestamp = models.DateTimeField(auto_now_add=True)
-    is_read = models.BooleanField(default=False)
 
-    class Meta:
-        ordering = ['-timestamp']
+class Notification(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='notifications')
+    notification_type = models.CharField(max_length=20)
+    target = models.ForeignKey(User, on_delete=models.CASCADE, related_name='target_user')
+    post = models.ForeignKey(Posts, on_delete=models.CASCADE, null=True, blank=True)
+    comment = models.ForeignKey(Comment, on_delete=models.CASCADE, null=True, blank=True)
+    date_created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f'Notification for {self.user.username}'
+        return f'{self.notification_type} notification for {self.user}'

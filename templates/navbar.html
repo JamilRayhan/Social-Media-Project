@@ -38,8 +38,9 @@
           <a class="nav-link" href="{% url 'App_Message:inbox' %}">Message</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="{% url 'App_Post:notifications' %}">Notification</a>
-        </li>  
+          <a class="nav-link" href="{% url 'App_Post:notifications' %}">Notifications</a>
+        </li>
+      
         <li class="nav-item dropdown">
           {% if user.user_profile.profile_pic %}
           <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">

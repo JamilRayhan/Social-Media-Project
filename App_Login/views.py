@@ -9,6 +9,8 @@ from App_Login.models import UserProfile,Follow
 
 from App_Post.forms import PostForm
 from django.contrib.auth.models import User
+
+from App_Post.models import Notification
 # Create your views here.
 
 
@@ -79,16 +81,23 @@ def user(request, username):
         return HttpResponseRedirect(reverse('App_Login:profile'))
     return render(request, 'App_Login/other_user.html',context={'user_other':user_other,'title':user_other.username, 'already_followed':already_followed})
 
+
 @login_required
-def follow(request,username):
+def follow(request, username):
     following_user = User.objects.get(username=username)
     follower_user = request.user
-    already_followed = Follow.objects.filter(follower=follower_user,following= following_user)
-    
+    already_followed = Follow.objects.filter(follower=follower_user, following=following_user)
+
     if not already_followed:
-        followed_user=Follow(follower=follower_user,following= following_user)
+        followed_user = Follow(follower=follower_user, following=following_user)
         followed_user.save()
-    return HttpResponseRedirect(reverse('App_Login:user', kwargs={'username':username}))
+
+        # Create a notification for the user being followed
+        notification = Notification(user=following_user, notification_type='Follow', target=follower_user)
+        notification.save()
+
+    return HttpResponseRedirect(reverse('App_Login:user', kwargs={'username': username}))
+
 
 @login_required
 def unfollow(request,username):

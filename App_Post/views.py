@@ -2,7 +2,7 @@ from django.shortcuts import HttpResponse,HttpResponseRedirect, redirect,render
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 from App_Login.models import UserProfile,Follow
-from App_Post.models import Notification, Posts,Like,Comment
+from App_Post.models import Posts,Like,Comment,Notification
 from django.contrib.auth.models import User
 # Create your views here.
 @login_required
@@ -23,10 +23,11 @@ def liked(request, pk):
     if not already_liked:
         liked_post = Like(post=post, user=request.user)
         liked_post.save()
-        
-        # Create a new notification for the post owner
-        notification = Notification(user=post.author, post=post, liked_by=request.user)
+
+        # Create a notification for the author of the post
+        notification = Notification(user=post.author, notification_type='Like', target=request.user, post=post)
         notification.save()
+
     return HttpResponseRedirect(reverse('home'))
 
 @login_required
@@ -40,23 +41,22 @@ def unlike(request,pk):
 def add_comment(request, post_id):
     if request.method == 'POST':
         post = Posts.objects.get(pk=post_id)
-        author = request.user
         content = request.POST['content']
 
-        comment = Comment(user=request.user, post=post, content=content)
+        comment = Comment(post=post, author=request.user, content=content)
         comment.save()
-        
-        # Create a new notification for the post owner
-        notification = Notification(user=post.author, post=post, commented_by=request.user)
+
+        # Create a notification for the author of the post
+        notification = Notification(user=post.author, notification_type='Comment', target=request.user, post=post, comment=comment)
         notification.save()
-        
+
         return redirect('App_Post:home')
 
     return render(request, 'App_Post/home.html')
 
-
 @login_required
 def notifications(request):
-    user = request.user
-    notifications = Notification.objects.filter(user=user, is_read=False)
+    notifications = Notification.objects.filter(user=request.user)
     return render(request, 'App_Post/notifications.html', {'notifications': notifications})
+
+
