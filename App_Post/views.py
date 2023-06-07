@@ -60,3 +60,11 @@ def notifications(request):
     return render(request, 'App_Post/notifications.html', {'notifications': notifications})
 
 
+@login_required
+def delete_post(request, post_id):
+    post = Posts.objects.get(pk=post_id)
+    if post.author == request.user:
+        post.delete()
+        return redirect('App_Login:user', username=request.user.username)
+    else:
+        return HttpResponse("You are not authorized to delete this post.")

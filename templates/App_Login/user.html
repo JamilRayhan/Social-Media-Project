@@ -94,6 +94,9 @@
               {% endif %}
               <br>
           </div>
+          
+          <a href="{% url 'App_Post:delete_post' post_id=post.id %}" class="btn btn-danger">Delete</a>
+
           <div class="crop">
             <img src="/media/{{post.image}}" class="" title="{{post.caption}}">
             <p>{{post.caption}}</p>
