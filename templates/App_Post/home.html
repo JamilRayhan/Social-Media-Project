@@ -61,15 +61,18 @@
           <div style="padding: 10px 20px;">
             <p>{{ post.caption }}</p>
           </div>
-          <img src="{{ post.image.url }}" width="100%">
+          <a href="{% url 'App_Post:post_details' post_id=post.pk %}"><img src="{{ post.image.url }}" width="100%"></a>
+          
           <div style="padding: 20px;">
             {% if post.pk in liked_post_list %}
               <a href="{% url 'App_Post:unlike' pk=post.pk %}"><i class="fa fa-heart" style="font-size: 36px;"></i></a>
             {% else %}
               <a href="{% url 'App_Post:liked' pk=post.pk %}"><i class="fa fa-heart-o" style="font-size: 36px;"></i></a>
             {% endif %}
+            <a href="{% url 'App_Post:post_details' post_id=post.pk %}"><i class="fa-regular fa-comment" style="font-size: 36px;"></i> </a>
             <br>
             {{ post.liked_post.count }} Likes
+            {{ post.comments.count }} Comments
           </div>
             
           <!-- Add Comment Section -->

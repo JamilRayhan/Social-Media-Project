@@ -1,0 +1,70 @@
+{% extends 'navbar.html' %}
+{% load crispy_forms_tags %}
+
+{% block title_block %}Post Details{% endblock %}
+
+{% block css_block %}
+<style>
+  /* Add your custom CSS styles here */
+</style>
+{% endblock %}
+
+{% block body_block %}
+  <div class="row">
+    <div class="col-sm-9">
+      <div class="posts">
+        <div class="profile_link">
+          <div class="row">
+            <div class="col-sm-1">
+              {% if post.author.user_profile.profile_pic %}
+                <a href="{% url 'App_Login:user' username=post.author %}">
+                  <img src="/media/{{ post.author.user_profile.profile_pic }}" width="70px" height="70px" class="rounded-circle">
+                </a>
+              {% else %}
+                <a href="{% url 'App_Login:user' username=post.author %}">
+                  <img src="/media/default.png" width="70px" height="70px" class="rounded-circle">
+                </a>
+              {% endif %}
+            </div>
+            <div class="col-sm-11">
+              <a href="{% url 'App_Login:user' username=post.author %}">{{ post.author }}</a>
+              <br>
+              {{ post.upload_date }}
+            </div>
+          </div>
+        </div>
+        <div style="padding: 10px 20px;">
+          <p>{{ post.caption }}</p>
+        </div>
+        <img src="{{ post.image.url }}" width="100%">
+        <div style="padding: 20px;">
+          <!-- Display likes count -->
+          {{ post.liked_post.count }} Likes
+          <!-- Display comments count -->
+          {{ post.comments.count }} Comments
+        </div>
+
+        <!-- Add Comment Section -->
+        <div>
+          <form method="POST" action="{% url 'App_Post:add_comment' post_id=post.pk %}">
+            {% csrf_token %}
+            <textarea name="content" placeholder="Write a comment..." rows="2"></textarea>
+            <button type="submit" class="btn btn-primary">Comment</button>
+          </form>
+          {% for comment in post.comments.all %}
+            <div>
+            {% if comment.author.user_profile.profile_pic  %}
+              <img src="/media/{{ comment.author.user_profile.profile_pic }}" width="40px" height="40px" class="rounded-circle">
+            {% else %}
+                <img src="/media/default.png" width="40px" height="40px" class="rounded-circle">
+            {% endif %}
+
+              <strong>{{ comment.author.username }}</strong>: {{ comment.content }} <br>
+              {{ comment.timestamp }}
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

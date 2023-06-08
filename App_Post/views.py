@@ -14,6 +14,7 @@ def home(request):
     posts = Posts.objects.filter(
         author__in=following_list.values_list('following'))
     liked_post = Like.objects.filter(user=request.user)
+
     liked_post_list = liked_post.values_list('post', flat=True)
     if request.method == 'GET':
         search = request.GET.get('search',  ' ')
@@ -45,10 +46,11 @@ def unlike(request, pk):
     return HttpResponseRedirect(reverse('home'))
 
 
+
 @login_required
 def add_comment(request, post_id):
     if request.method == 'POST':
-        post = Posts.objects.get(pk=post_id)
+        post = get_object_or_404(Posts, pk=post_id)
         content = request.POST['content']
 
         comment = Comment(post=post, author=request.user, content=content)
@@ -59,7 +61,7 @@ def add_comment(request, post_id):
             user=post.author, notification_type='Comment', target=request.user, post=post, comment=comment)
         notification.save()
 
-        return redirect('App_Post:home')
+        return redirect(request.META['HTTP_REFERER'])  # Redirect to the previous page
 
     return render(request, 'App_Post/home.html')
 
@@ -93,3 +95,9 @@ def edit_post(request, post_id):
         form = PostForm(instance=post)
 
     return render(request, 'App_Post/edit_post.html', {'form': form})
+
+
+
+def post_details(request, post_id):
+    post = get_object_or_404(Posts, pk=post_id)
+    return render(request, 'App_Post/post_details.html', {'post': post})

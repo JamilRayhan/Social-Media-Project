@@ -44,5 +44,10 @@ class Notification(models.Model):
     comment = models.ForeignKey(Comment, on_delete=models.CASCADE, null=True, blank=True)
     date_created = models.DateTimeField(auto_now_add=True)
 
+    
+    class Meta:
+        ordering = ['-date_created']
+        
+    
     def __str__(self):
         return f'{self.notification_type} notification for {self.user}'
