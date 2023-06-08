@@ -10,5 +10,5 @@ urlpatterns = [
     path('add-comment/<post_id>', views.add_comment, name='add_comment'),  
     path('notifications/', views.notifications, name='notifications'),
     path('delete-post/<post_id>/', views.delete_post, name='delete_post'),
-
+    path('edit-post/<post_id>/', views.edit_post, name='edit_post'),
 ]

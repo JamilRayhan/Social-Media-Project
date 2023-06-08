@@ -1,121 +1,156 @@
 {% extends 'navbar.html' %}
 {% load crispy_forms_tags %}
-{% block title_block %}{{title}}{% endblock  %}
+{% block title_block %}{{ title }}{% endblock  %}
 
 {% block css_block %}
-    <style>
-        .crop{
-            width: 400px;
-            height: 400px;
-            overflow: hidden;
-            position: relative;
-        }
-        .crop img{
-            max-width: 100%;
-            max-height: 100%;
-            width: auto;
-            height: auto;
-            display: block;
-            margin: auto;
-        }
-    </style>
+<style>
+    .crop {
+        width: 400px;
+        height: 400px;
+        overflow: hidden;
+        position: relative;
+    }
+    .crop img {
+        max-width: 100%;
+        max-height: 100%;
+        width: auto;
+        height: auto;
+        display: block;
+        margin: auto;
+    }
+</style>
 {% endblock  %}
 
 {% block body_block %}
-    <div class="row">
-        <div class="col-sm-4">
-            {% if user.user_profile.profile_pic %}
-            <a class="dropdown-item" href="">
-              <img src="/media/{{user.user_profile.profile_pic}}" width= '250px' height="250px" class="rounded-circle"> 
-            </a>
-            {% else %}
-            <a class="dropdown-item" href="">
-              <img src="/media/default.png" width= '250px' height="250px" class="rounded-circle">
-            </a>
-            {% endif %}
-        
-        </div>
-        <div class="col-sm-8">
-            <h3>{{ user.username }} &nbsp; <a href="{% url 'App_Login:edit' %}" class="btn btn-light btn-sm">Edit Profile</a></h3>
-            <br>
-            <h4>{{user.post.count}} Posts &nbsp; &nbsp; {{user.following.count}} Followers &nbsp; &nbsp; {{user.follower.count}} Following</h4>
-            <br>
-            <h4>{{user.user_profile.full_name}}</h4>
-            <h6>{{user.user_profile.description|linebreaks}}</h6>
-        </div>
-    </div>
-    <hr>
-    <div class="container mt-3">
-      <!-- The Modal -->
-    <div class="modal" id="myModal">
-        <div class="modal-dialog">
-          <div class="modal-content">
-      
-            <!-- Modal Header -->
-            <div class="modal-header">
-              <h4 class="modal-title">Post a Photo</h4>
-              <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-      
-            <!-- Modal body -->
-            <div class="modal-body">
-              <form method="POST" enctype="multipart/form-data">
-                {{post.as_p}}
-                {% csrf_token %}
-                <button type="submit" class="btn btn-primary btn-sm">Post</button>
-              </form>
-            </div>
-      
-            <!-- Modal footer -->
-            <div class="modal-footer">
-              <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
-            </div>
-      
-          </div>
-        </div>
-      </div>
-      
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#myModal">
-          Post Photo
-        </button>
-    </div>
-    <br>
-    <div class="row">
-      {% for post in user.post.all %}
-          <div>
-              {% if user.user_profile.profile_pic %}
-                  <a href="">
-                      <img src="/media/{{user.user_profile.profile_pic}}" width="40px" height="40px" class="rounded-circle"> {{user.username}}
-                  </a>
-              {% else %}
-                  <a href="">
-                      <img src="/media/default.png" width="40px" height="40px" class="rounded-circle"> {{user.username}}
-                  </a>
-              {% endif %}
-              <br>
-          </div>
-          
-          <a href="{% url 'App_Post:delete_post' post_id=post.id %}" class="btn btn-danger">Delete</a>
+<div class="row">
+    <div class="col-sm-4">
+        {% if user.user_profile.profile_pic %}
+        <a class="dropdown-item" href="">
+            <img src="/media/{{user.user_profile.profile_pic}}" width="250px" height="250px" class="rounded-circle">
+        </a>
+        {% else %}
+        <a class="dropdown-item" href="">
+            <img src="/media/default.png" width="250px" height="250px" class="rounded-circle">
+        </a>
+        {% endif %}
 
-          <div class="crop">
-            <img src="/media/{{post.image}}" class="" title="{{post.caption}}">
-            <p>{{post.caption}}</p>
-            <div style="padding: 20px;">
-                <br>{{ post.liked_post.count }} Likes
+    </div>
+    <div class="col-sm-8">
+        <h3>{{ user.username }} &nbsp; <a href="{% url 'App_Login:edit' %}" class="btn btn-light btn-sm">Edit Profile</a></h3>
+        <br>
+        <h4>{{ user.post.count }} Posts &nbsp; &nbsp; {{ user.following.count }} Followers &nbsp; &nbsp; {{ user.follower.count }} Following</h4>
+        <br>
+        <h4>{{ user.user_profile.full_name }}</h4>
+        <h6>{{ user.user_profile.description|linebreaks }}</h6>
+    </div>
+</div>
+<hr>
+<div class="container mt-3">
+    <!-- The Modal -->
+    <div class="modal" id="postModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Post a Photo</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <form method="POST" enctype="multipart/form-data">
+                        {{ post.as_p }}
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-primary btn-sm">Post</button>
+                    </form>
+                </div>
+
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                </div>
+
             </div>
         </div>
-          {% for comment in post.comments.all %}
-          <li>
-              <a href="{% url 'App_Login:user' username=comment.author %}">{{ comment.author }}</a>: {{ comment.content}}
-              <br>
-              {{ comment.timestamp }}
-              <br>
-          </li>
-          {% empty %}
-          <li>Not Comment yet.</li>
-          {% endfor %}
-          <br>
-      {% endfor %}
-  </div>
-    <br><br>
-{% endblock  %} 
+    </div>
+
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#postModal">
+        Post Photo
+    </button>
+</div>
+<br>
+<div class="row">
+    {% for post in user.post.all %}
+        <div>
+            {% if user.user_profile.profile_pic %}
+                <a href="">
+                    <img src="/media/{{user.user_profile.profile_pic}}" width="40px" height="40px" class="rounded-circle"> {{user.username}}
+                </a>
+            {% else %}
+                <a href="">
+                    <img src="/media/default.png" width="40px" height="40px" class="rounded-circle"> {{user.username}}
+                </a>
+            {% endif %}
+            <br>
+        </div>
+
+        <div class="container mt-3">
+          <!-- The Modal -->
+          <div class="modal" id="myModal{{ post.id }}">
+              <div class="modal-dialog">
+                  <div class="modal-content">
+      
+                      <!-- Modal Header -->
+                      <div class="modal-header">
+                          <h4 class="modal-title"></h4>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                      </div>
+      
+                      <!-- Modal body -->
+                      <div class="modal-body">
+                        <div>
+                          <a href="{% url 'App_Post:edit_post' post_id=post.id %}" class="btn btn-primary">Edit</a>
+                          <a href="{% url 'App_Post:delete_post' post_id=post.id %}" class="btn btn-danger">Delete</a>
+                        </div>
+                      </div>
+      
+                      <!-- Modal footer -->
+                      <div class="modal-footer">
+                          <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                      </div>
+      
+                  </div>
+              </div>
+          </div>
+      
+          <button type="button" class="btn " data-bs-toggle="modal" data-bs-target="#myModal{{ post.id }}">
+              ...
+          </button>
+      </div>
+
+        
+        <div class="crop">
+          <p>{{ post.caption }}</p>
+          <img src="/media/{{ post.image }}" class="" title="{{ post.caption }}">
+            
+          <div style="padding: 20px;">
+              {{ post.liked_post.count }} Likes
+          </div>
+        </div>
+
+        {% for comment in post.comments.all %}
+            <li>
+                <a href="{% url 'App_Login:user' username=comment.author %}">{{ comment.author }}</a>: {{ comment.content }}
+                <br>
+                {{ comment.timestamp }}
+                <br>
+            </li>
+        {% empty %}
+            <li>No comments yet.</li>
+        {% endfor %}
+        <br>
+    {% endfor %}
+</div>
+<br><br>
+{% endblock %}

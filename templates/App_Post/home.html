@@ -1,5 +1,6 @@
 {% extends 'navbar.html' %}
 {% load crispy_forms_tags %}
+
 {% block title_block %}NewsFeed{% endblock %}
 
 {% block css_block %}
@@ -35,68 +36,74 @@
   
   <div class="row">
     <div class="col-sm-9">
-        {% for post in posts %}
-          <div class="posts">
-            <div class="profile_link">
-              <div class="row">
-                <div class="col-sm-1">
-                  {% if post.author.user_profile.profile_pic %}
-                    <a href="{% url 'App_Login:user' username=post.author %}">
-                      <img src="/media/{{ post.author.user_profile.profile_pic }}" width="70px" height="70px" class="rounded-circle"> </a>
-                  {% else %}
-                    <a href="{% url 'App_Login:user' username=post.author %}">
-                      <img src="/media/default.png" width="70px" height="70px" class="rounded-circle"></a>
-                  {% endif %}
-                </div>
-                <div class="col-sm-11">
-                  <a href="{% url 'App_Login:user' username=post.author %}">{{ post.author }}</a>
-                  <br>
-                  {{ post.upload_date }}
-                </div>
+      {% for post in posts %}
+        <div class="posts">
+          <div class="profile_link">
+            <div class="row">
+              <div class="col-sm-1">
+                {% if post.author.user_profile.profile_pic %}
+                  <a href="{% url 'App_Login:user' username=post.author %}">
+                    <img src="/media/{{ post.author.user_profile.profile_pic }}" width="70px" height="70px" class="rounded-circle">
+                  </a>
+                {% else %}
+                  <a href="{% url 'App_Login:user' username=post.author %}">
+                    <img src="/media/default.png" width="70px" height="70px" class="rounded-circle">
+                  </a>
+                {% endif %}
+              </div>
+              <div class="col-sm-11">
+                <a href="{% url 'App_Login:user' username=post.author %}">{{ post.author }}</a>
+                <br>
+                {{ post.upload_date }}
               </div>
             </div>
-            <img src="/media/{{ post.image }}" width="100%">
-            <div style="padding:20px">
-              {% if post.pk in liked_post_list %}
-                <a href="{% url 'App_Post:unlike' pk=post.pk %}"><i class="fa fa-heart" style="font-size: 36px;"></i></a>
-              {% else %}
-                <a href="{% url 'App_Post:liked' pk=post.pk %}"><i class="fa fa-heart-o" style="font-size: 36px;"></i></a>
-              {% endif %}
-              <br>{{ post.liked_post.count }} Likes
-            </div>
-            
-            <!-- Add Comment Section -->
-            <div>
-              <form method="POST" action="{% url 'App_Post:add_comment' post_id=post.pk %}">
-                {% csrf_token %}
-                <textarea name="content" placeholder="Write a comment..." rows="2"></textarea>
-                <button type="submit" class="btn btn-primary">Comment</button>
-              </form>
-              {% for comment in post.comments.all %}
-                <div>
-                  <strong>{{ comment.author.username }}</strong>: {{ comment.content }} <br>
-                  {{comment.timestamp}}
-                </div>
-              {% endfor %}
-            </div>
           </div>
-          <br><br>
-        {% endfor %}
+          <div style="padding: 10px 20px;">
+            <p>{{ post.caption }}</p>
+          </div>
+          <img src="{{ post.image.url }}" width="100%">
+          <div style="padding: 20px;">
+            {% if post.pk in liked_post_list %}
+              <a href="{% url 'App_Post:unlike' pk=post.pk %}"><i class="fa fa-heart" style="font-size: 36px;"></i></a>
+            {% else %}
+              <a href="{% url 'App_Post:liked' pk=post.pk %}"><i class="fa fa-heart-o" style="font-size: 36px;"></i></a>
+            {% endif %}
+            <br>
+            {{ post.liked_post.count }} Likes
+          </div>
+            
+          <!-- Add Comment Section -->
+          <div>
+            <form method="POST" action="{% url 'App_Post:add_comment' post_id=post.pk %}">
+              {% csrf_token %}
+              <textarea name="content" placeholder="Write a comment..." rows="2"></textarea>
+              <button type="submit" class="btn btn-primary">Comment</button>
+            </form>
+            {% for comment in post.comments.all %}
+              <div>
+                <strong>{{ comment.author.username }}</strong>: {{ comment.content }} <br>
+                {{ comment.timestamp }}
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+        <br><br>
+      {% endfor %}
     </div>
     
     <div class="col-sm-3">
       <div class="row">
         <div class="col-sm-6">
-          {% if user.user_profile.profile_pic %}
-            <img src="/media/{{ user.user_profile.profile_pic }}" width="100%" height="100%" class="">
+          {% if request.user.user_profile.profile_pic %}
+            <img src="/media/{{ request.user.user_profile.profile_pic }}" width="100%" height="100%" class="">
           {% else %}
             <img src="/media/default.png" width="100%" height="100%" class="">
           {% endif %}
         </div>
         <div class="col-sm-6">
-          {{ user.username }}
+          {{ request.user.username }}
           <br>
-          {{ user.user_profile.full_name }}
+          {{ request.user.user_profile.full_name }}
         </div>
       </div>
     </div>
