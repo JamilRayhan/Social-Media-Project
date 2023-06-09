@@ -73,13 +73,19 @@ def profile(request):
             return HttpResponseRedirect(reverse('home'))
     return render(request, 'App_Login/user.html', context={'title':request.user.username, 'post':post_form})
 
+
 @login_required
 def user(request, username):
-    user_other= User.objects.get(username=username)
-    already_followed = Follow.objects.filter(follower=request.user,following= user_other)
-    if user == request.user:
+    user_other = User.objects.get(username=username)
+    already_followed = Follow.objects.filter(follower=request.user, following=user_other)
+    follower_list = [follower.follower.username for follower in Follow.objects.filter(following=user_other)]
+    following_list = [following.following.username for following in Follow.objects.filter(follower=user_other)]  # Updated line
+
+    if user_other == request.user:
         return HttpResponseRedirect(reverse('App_Login:profile'))
-    return render(request, 'App_Login/other_user.html',context={'user_other':user_other,'title':user_other.username, 'already_followed':already_followed})
+
+    return render(request, 'App_Login/other_user.html', context={'user_other': user_other, 'title': user_other.username, 'already_followed': already_followed, 'follower_list': follower_list, 'following_list': following_list})
+
 
 
 @login_required
