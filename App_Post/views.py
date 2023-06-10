@@ -31,9 +31,9 @@ def liked(request, pk):
         liked_post.save()
 
         # Create a notification for the author of the post
-        notification = Notification(
-            user=post.author, notification_type='Like', target=request.user, post=post)
-        notification.save()
+        if post.author != request.user:
+            notification = Notification(user=post.author, notification_type='Like', target=request.user, post=post)
+            notification.save()
 
     return redirect(request.META['HTTP_REFERER'])
 
@@ -58,9 +58,9 @@ def add_comment(request, post_id):
         comment.save()
 
         # Create a notification for the author of the post
-        notification = Notification(
-            user=post.author, notification_type='Comment', target=request.user, post=post, comment=comment)
-        notification.save()
+        if post.author != request.user:
+            notification = Notification(user=post.author, notification_type='Comment', target=request.user, post=post, comment=comment)
+            notification.save()
 
         return redirect(request.META['HTTP_REFERER'])  # Redirect to the previous page
 
