@@ -35,7 +35,7 @@ def liked(request, pk):
             user=post.author, notification_type='Like', target=request.user, post=post)
         notification.save()
 
-    return HttpResponseRedirect(reverse('home'))
+    return redirect(request.META['HTTP_REFERER'])
 
 
 @login_required
@@ -43,7 +43,8 @@ def unlike(request, pk):
     post = Posts.objects.get(pk=pk)
     already_liked = Like.objects.filter(post=post, user=request.user)
     already_liked.delete()
-    return HttpResponseRedirect(reverse('home'))
+
+    return redirect(request.META['HTTP_REFERER']) 
 
 
 
@@ -97,7 +98,7 @@ def edit_post(request, post_id):
     return render(request, 'App_Post/edit_post.html', {'form': form})
 
 
-
+@login_required
 def post_details(request, post_id):
     post = get_object_or_404(Posts, pk=post_id)
     return render(request, 'App_Post/post_details.html', {'post': post})

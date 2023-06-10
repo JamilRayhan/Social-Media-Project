@@ -69,10 +69,12 @@
             {% else %}
               <a href="{% url 'App_Post:liked' pk=post.pk %}"><i class="fa fa-heart-o" style="font-size: 36px;"></i></a>
             {% endif %}
+            &nbsp; &nbsp; &nbsp;
             <a href="{% url 'App_Post:post_details' post_id=post.pk %}"><i class="fa-regular fa-comment" style="font-size: 36px;"></i> </a>
             <br>
-            {{ post.liked_post.count }} Likes
-            {{ post.comments.count }} Comments
+            {{ post.liked_post.count }} Likes <br>
+
+             <a href="{% url 'App_Post:post_details' post_id=post.pk %}">View all {{ post.comments.count }} Comments</a>
           </div>
             
           <!-- Add Comment Section -->
@@ -82,12 +84,6 @@
               <textarea name="content" placeholder="Write a comment..." rows="2"></textarea>
               <button type="submit" class="btn btn-primary">Comment</button>
             </form>
-            {% for comment in post.comments.all %}
-              <div>
-                <strong>{{ comment.author.username }}</strong>: {{ comment.content }} <br>
-                {{ comment.timestamp }}
-              </div>
-            {% endfor %}
           </div>
         </div>
         <br><br>

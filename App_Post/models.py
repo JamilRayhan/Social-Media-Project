@@ -11,7 +11,7 @@ class Posts(models.Model):
     update_date = models.DateTimeField(auto_now=True)
     
     class Meta:
-        ordering=['-upload_date',]
+        ordering=['-upload_date']
         
         
 class Like(models.Model):

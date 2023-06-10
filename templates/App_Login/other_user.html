@@ -6,14 +6,14 @@
 {% block css_block %}
 <style>
     .crop {
-        width: 400px;
-        height: 400px;
+        width: 500px;
+        height: auto;
         overflow: hidden;
         position: relative;
     }
     .crop img {
-        max-width: 100%;
-        max-height: 100%;
+        max-width: 90%;
+        max-height: 90%;
         width: auto;
         height: auto;
         display: block;
@@ -119,20 +119,22 @@
         <br>
     </div>
     <div class="crop">
-        <img src="/media/{{ post.image }}" class="" title="{{ post.caption }}">
         <p>{{ post.caption }}</p>
+        <img src="/media/{{ post.image }}" class="" title="{{ post.caption }}">
+        
+        <div style="padding: 20px;">
+            {% if post.pk in liked_post_list %}
+              <a href="{% url 'App_Post:unlike' pk=post.pk %}"><i class="fa fa-heart" style="font-size: 36px;"></i></a>
+            {% else %}
+              <a href="{% url 'App_Post:liked' pk=post.pk %}"><i class="fa fa-heart-o" style="font-size: 36px;"></i></a>
+            {% endif %}
+            &nbsp; &nbsp; &nbsp;
+            <a href="{% url 'App_Post:post_details' post_id=post.pk %}"><i class="fa-regular fa-comment" style="font-size: 36px;"></i> </a>
+            <br>{{ post.liked_post.count }} Likes <br>
+            <a href="{% url 'App_Post:post_details' post_id=post.pk %}">View all {{ post.comments.count }} Comments</a>
+            
+          </div>
     </div>
-    <br>
-    {% for comment in post.comments.all %}
-    <li>
-        <a href="{% url 'App_Login:user' username=comment.author %}">{{ comment.author }}</a>: {{ comment.content }}
-        <br>
-        at: {{ comment.timestamp }}
-        <br>
-    </li>
-    {% empty %}
-    <li>No comments yet.</li>
-    {% endfor %}
     <br>
     {% endfor %}
 </div>
