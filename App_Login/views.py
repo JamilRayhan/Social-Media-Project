@@ -63,6 +63,9 @@ def logout_user(request):
 
 @login_required
 def profile(request):
+    user = User.objects.get(username=request.user.username)
+    follower_list = [follower.follower.username for follower in Follow.objects.filter(following=user)]
+    following_list = [following.following.username for following in Follow.objects.filter(follower=user)]  
     post_form = PostForm()
     if request.method == 'POST':
         post_form = PostForm(request.POST, request.FILES)
@@ -71,7 +74,7 @@ def profile(request):
             post.author = request.user
             post.save()
             return HttpResponseRedirect(reverse('home'))
-    return render(request, 'App_Login/user.html', context={'title':request.user.username, 'post':post_form})
+    return render(request, 'App_Login/user.html', context={'title':request.user.username, 'post':post_form, 'follower_list': follower_list, 'following_list': following_list})
 
 
 @login_required
