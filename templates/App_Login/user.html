@@ -38,74 +38,48 @@
     <div class="col-sm-8">
         <h3>{{ user.username }} &nbsp; <a href="{% url 'App_Login:edit' %}" class="btn btn-light btn-sm">Edit Profile</a></h3>
         <br>
-        <h4>{{ user.post.count }} Posts &nbsp; &nbsp; 
-            <a href="#followerModal" data-bs-toggle="modal">{{ user.following.count }} Followers</a> &nbsp; &nbsp; 
-            <a href="#followingModal" data-bs-toggle="modal">{{ user.follower.count }} Following</a></h4>
+        <h4>{{ user.post.count }} Posts &nbsp; &nbsp;
+            {{ user.following.count }} Followers &nbsp; &nbsp; 
+            {{ user.follower.count }} Following</h4>
         <br>
         <h4>{{ user.user_profile.full_name }}</h4>
         <h6>{{ user.user_profile.description|linebreaks }}</h6>
     </div>
 </div>
 <hr>
-<!-- Follower Modal -->
-<div class="modal fade" id="followerModal" tabindex="-1" aria-labelledby="followerModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="followerModalLabel">Followers</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <ul>
-                    {% for follower in follower_list %}
-                        <li><a href="{% url 'App_Login:user' username=follower.username %}">{{ follower.username }}</a></li>
-                    {% empty %}
-                        <li>No followers.</li>
-                    {% endfor %}
-                </ul>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Following Modal -->
-<div class="modal fade" id="followingModal" tabindex="-1" aria-labelledby="followingModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="followingModalLabel">Following</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <ul>
-                    {% for following in following_list %}
-                        <li><a href="{% url 'App_Login:user' username=following.username %}">{{ following.username }}</a></li>
-                    {% empty %}
-                        <li>Not following anyone.</li>
-                    {% endfor %}
-                </ul>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
-</div>
 
 <div class="container mt-3">
     <!-- The Modal -->
-    <div class="modal" id="postModal">
-        <!-- Rest of the modal code -->
+    <div class="modal" id="myModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Post a Photo</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <form method="POST" enctype="multipart/form-data">
+                        {{ post.as_p }}
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-primary btn-sm">Post</button>
+                    </form>
+                </div>
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
     </div>
-
-    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#postModal">
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#myModal">
         Post Photo
     </button>
 </div>
+
 <br>
+
 <div class="row">
     {% for post in user.post.all %}
         <div>
@@ -122,14 +96,36 @@
         </div>
 
         <div class="container mt-3">
-          <!-- The Modal -->
-          <div class="modal" id="myModal{{ post.id }}">
-              <!-- Rest of the modal code -->
-          </div>
+          <!-- Edit and Delete Modal for each post -->
+<div class="modal" id="myModal{{ post.id }}">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title"></h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body">
+                <div>
+                    <a href="{% url 'App_Post:edit_post' post_id=post.id %}" class="btn btn-primary">Edit</a>
+                    <a href="{% url 'App_Post:delete_post' post_id=post.id %}" class="btn btn-danger">Delete</a>
+                </div>
+            </div>
+
+            <!-- Modal footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
       
-          <button type="button" class="btn " data-bs-toggle="modal" data-bs-target="#myModal{{ post.id }}">
+          <a type="link" class=" " data-bs-toggle="modal" data-bs-target="#myModal{{ post.id }}">
               ...
-          </button>
+          </a>
       </div>
 
         <div class="crop">
