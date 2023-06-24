@@ -9,6 +9,12 @@
     padding: 10px;
     border-bottom: 1px solid #ccc;
   }
+  
+  .unread-notification {
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+    background-color: #828282;  
+  }
 </style>
 {% endblock %}
 
@@ -16,8 +22,8 @@
   <h1>Notifications</h1>
   {% if notifications %}
     <ul>
-      {% for notification in notifications %}
-        <li class="notification">
+      {% for notification in unread_notifications %}
+        <li class="unread-notification">
           {% if notification.notification_type == 'Like' %}
             <strong>{{ notification.target.username }}</strong> liked your post:
             <a href="{% url 'App_Post:post_details' post_id=notification.post.pk %}">{{ notification.post.caption }}</a>
@@ -33,8 +39,27 @@
           {% endif %}
         </li>
       {% endfor %}
+      {% for notification in notifications %}
+        {% if notification not in unread_notifications %}
+          <li class="notification">
+            {% if notification.notification_type == 'Like' %}
+              <strong>{{ notification.target.username }}</strong> liked your post:
+              <a href="{% url 'App_Post:post_details' post_id=notification.post.pk %}">{{ notification.post.caption }}</a>
+            {% elif notification.notification_type == 'Comment' %}
+              <strong>{{ notification.target.username }}</strong> commented on your post:
+              <a href="{% url 'App_Post:post_details' post_id=notification.post.pk %}">{{ notification.post.caption }}</a>
+              <br>
+              Comment: {{ notification.comment.content }}
+            {% elif notification.notification_type == 'Follow' %}
+              <a href="{% url 'App_Login:user' username=notification.target.username %}">
+                <strong>{{ notification.target.username }}</strong> started following you.
+              </a>
+            {% endif %}
+          </li>
+        {% endif %}
+      {% endfor %}
     </ul>
   {% else %}
-    <p>No notifications found.</p>
+    <p>No new notifications.</p>
   {% endif %}
 {% endblock %}

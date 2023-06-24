@@ -43,8 +43,9 @@ class Notification(models.Model):
     post = models.ForeignKey(Posts, on_delete=models.CASCADE, null=True, blank=True)
     comment = models.ForeignKey(Comment, on_delete=models.CASCADE, null=True, blank=True)
     date_created = models.DateTimeField(auto_now_add=True)
+    is_new = models.BooleanField(default=True)
 
-    
+
     class Meta:
         ordering = ['-date_created']
         

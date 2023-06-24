@@ -4,7 +4,7 @@ from .models import Message
 from .forms import MessageSendForm, MessageReplyForm
 from django.contrib.auth.models import User
 from django.db.models import Q
-
+from App_Post.context_processors import *
 
 @login_required
 def send_message(request, username):
@@ -20,8 +20,12 @@ def send_message(request, username):
             return redirect('App_Message:inbox')
     else:
         msg_form = MessageSendForm()
-
-    return render(request, 'App_Message/send_message.html', {'msg_form': msg_form, 'recipient': recipient})
+    context = {
+        'msg_form': msg_form, 
+        'recipient': recipient,
+        **base_context(request)  
+    }
+    return render(request, 'App_Message/send_message.html',context )
 
 
 @login_required
@@ -34,8 +38,11 @@ def inbox(request):
         if message.sender not in seen_senders:
             seen_senders.add(message.sender)
             unique_conversations.append(message)
-
-    return render(request, 'App_Message/inbox.html', {'received_messages': unique_conversations})
+    context = {
+        'received_messages': unique_conversations,
+        **base_context(request)  
+    }
+    return render(request, 'App_Message/inbox.html', context)
 
 
 @login_required
@@ -58,8 +65,14 @@ def conversation_view(request, username1, username2):
             return redirect('App_Message:conversation', username1=username1, username2=username2)
     else:
         reply_form = MessageReplyForm()
-
-    return render(request, 'App_Message/conversation.html', {'messages': messages, 'user1': user1, 'user2': user2, 'reply_form': reply_form})
+    context = {
+        'messages': messages,
+        'user1': user1, 
+        'user2': user2, 
+        'reply_form': reply_form,
+        **base_context(request)  
+    }
+    return render(request, 'App_Message/conversation.html', context)
 
 
 @login_required
