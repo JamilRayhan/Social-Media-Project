@@ -6,9 +6,10 @@ class Message(models.Model):
     recipient = models.ForeignKey(User, related_name='received_messages', on_delete=models.CASCADE)
     content = models.TextField()
     timestamp = models.DateTimeField(auto_now_add=True)
+    is_new = models.BooleanField(default=True)
 
     class Meta:
         ordering = ['-timestamp']
         
     def __str__(self):
-        return f"From: {self.sender.username}, To: {self.recipient.username}"
+        return f"From: {self.sender.username}, To: {self.recipient.username}"  

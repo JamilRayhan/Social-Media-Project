@@ -14,9 +14,9 @@ from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-TEMPLATES_DIR = os.path.join(BASE_DIR,'templates')
-STATIC_DIR = os.path.join(BASE_DIR,'static')
-MEDIA_DIR = os.path.join(BASE_DIR,'media')
+TEMPLATES_DIR = os.path.join(BASE_DIR, 'templates')
+STATIC_DIR = os.path.join(BASE_DIR, 'static')
+MEDIA_DIR = os.path.join(BASE_DIR, 'media')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
@@ -41,11 +41,12 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'App_Login',
     'App_Post',
+    'App_Settings',
     'App_Message',
     'crispy_forms',
     'crispy_bootstrap5',
     'django_cleanup.apps.CleanupConfig',
-    
+
 ]
 
 # bootstrap,bootstrap3,bootstrap4,uni-form
@@ -137,6 +138,6 @@ STATICFILES_DIR = [STATIC_DIR, ]
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-#media
-MEDIA_ROOT= MEDIA_DIR
-MEDIA_URL= '/media/'
+# media
+MEDIA_ROOT = MEDIA_DIR
+MEDIA_URL = '/media/'

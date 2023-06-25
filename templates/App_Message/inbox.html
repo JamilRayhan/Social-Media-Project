@@ -5,24 +5,31 @@
 
 {% block css_block %}
 <style>
-    /* Add your custom CSS styles here */
+  .unread-message {
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+    background-color: #828282;  
+  }
 </style>
 {% endblock  %}
 
-{% block body_block %}
+{% block body_block %} 
 <h1>Inbox</h1>
 
 {% if received_messages %}
 <ul>
   {% for message in received_messages %}
-  <li>
+    {% if message.is_new %}
+      <li class='unread-message'>
+    {% else %}
+      <li>
+    {% endif %}
     <strong>From:</strong> {{ message.sender.username }}<br>
     <strong>Date:</strong> {{ message.timestamp }}<br>
     <strong>Content:</strong> {{ message.content }}<br>
     <a href="{% url 'App_Message:conversation' user.username message.sender.username %}">View Conversation</a>
   </li>
-{% endfor %}
-
+  {% endfor %}
 </ul>
 {% else %}
 <p>Your inbox is empty.</p>

@@ -27,10 +27,12 @@ def send_message(request, username):
     }
     return render(request, 'App_Message/send_message.html',context )
 
-
+ 
 @login_required
 def inbox(request):
     received_messages = Message.objects.filter(recipient=request.user)
+    unread_messages = received_messages.filter(is_new=False)
+    unread_messages_count = unread_messages.count()
 
     seen_senders = set()
     unique_conversations = []
@@ -38,9 +40,12 @@ def inbox(request):
         if message.sender not in seen_senders:
             seen_senders.add(message.sender)
             unique_conversations.append(message)
+
     context = {
         'received_messages': unique_conversations,
-        **base_context(request)  
+        'unread_messages':unread_messages,
+        'unread_messages_count': unread_messages_count,
+        **base_context(request)
     }
     return render(request, 'App_Message/inbox.html', context)
 
@@ -65,6 +70,13 @@ def conversation_view(request, username1, username2):
             return redirect('App_Message:conversation', username1=username1, username2=username2)
     else:
         reply_form = MessageReplyForm()
+
+    # Mark messages as read
+    unread_messages = messages.filter(recipient=request.user, is_new=True)
+    for message in unread_messages:
+        message.is_new = False
+        message.save()
+
     context = {
         'messages': messages,
         'user1': user1, 
@@ -73,6 +85,7 @@ def conversation_view(request, username1, username2):
         **base_context(request)  
     }
     return render(request, 'App_Message/conversation.html', context)
+
 
 
 @login_required
