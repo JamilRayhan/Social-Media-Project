@@ -71,7 +71,7 @@
               </a>
               {% endif %}
             </li>
-            <li><a class="dropdown-item" href="#">Settings</a></li>
+            <li><a class="dropdown-item" href="{% url 'App_Settings:settings' %}">Settings</a></li>
             <li><a class="dropdown-item" href="{% url 'App_Login:logout' %}">Logout</a></li>
           </ul>
         </li>
@@ -85,6 +85,8 @@
   {% block body_block %}
   {% endblock %}
 </div>
+{% block script_block %}
 
+{% endblock %}
 </body>
 </html>

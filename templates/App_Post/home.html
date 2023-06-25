@@ -20,46 +20,48 @@
 {% endblock %}
 
 {% block body_block %}
-{% for result_item in result %}
-    {% if result_item.user_profile %}
-      {% with user=result_item %}
-        {% if user != request.user %}
-          <div class="row">
-            <div>
-              {% if user.user_profile.profile_pic %}
-                <a href="{% url 'App_Login:user' username=user.username %}">
-                  <img src="/media/{{ user.user_profile.profile_pic }}" width="40px" height="40px" class="rounded-circle"> {{ user.user_profile.full_name }}
-                </a>
-              {% else %}
-                <a href="{% url 'App_Login:user' username=user.username %}">
-                  <img src="/media/default.png" width="40px" height="40px" class="rounded-circle"> {{ user.user_profile.full_name }}
-                </a>
-              {% endif %}
-              <br>
-            </div>
-          </div>
-        {% endif %}
-      {% endwith %}
-    {% else %}
-      {% with post=result_item %}
-        <div class="search-posts">
-          <div class="profile_link">
-            <div class="row">
-              <div class="col-sm-11">
-                <a href="{% url 'App_Login:user' username=post.author %}">{{ post.author }}</a>
+    {% for result_item in result %}
+      {% if result_item.user_profile %}
+        {% with user=result_item %}
+          {% if user.user_profile %}
+            {% if user != request.user %}
+              <div class="row">
+                <div>
+                  {% if user.user_profile.profile_pic %}
+                    <a href="{% url 'App_Login:user' username=user.username %}">
+                      <img src="/media/{{ user.user_profile.profile_pic }}" width="40px" height="40px" class="rounded-circle"> {{ user.user_profile.full_name }}
+                    </a>
+                  {% else %}
+                    <a href="{% url 'App_Login:user' username=user.username %}">
+                      <img src="/media/default.png" width="40px" height="40px" class="rounded-circle"> {{ user.user_profile.full_name }}
+                    </a>
+                  {% endif %}
+                  <br>
+                </div>
+              </div>
+            {% endif %}
+          {% endif %}
+        {% endwith %}
+      {% else %}
+        {% with post=result_item %}
+          <div class="search-posts">
+            <div class="profile_link">
+              <div class="row">
+                <div class="col-sm-11">
+                  <a href="{% url 'App_Login:user' username=post.author %}">{{ post.author }}</a>
+                </div>
               </div>
             </div>
+            <div style="padding: 10px 20px;">
+              <p>{{ post.caption }}</p>
+            </div>
+            <a href="{% url 'App_Post:post_details' post_id=post.pk %}"><img src="{{ post.image.url }}" width="100%"></a>
           </div>
-          <div style="padding: 10px 20px;">
-            <p>{{ post.caption }}</p>
-          </div>
-          <a href="{% url 'App_Post:post_details' post_id=post.pk %}"><img src="{{ post.image.url }}" width="100%"></a>
-        </div>
-        <br><br>
-      {% endwith %}
-    {% endif %}
-  {% endfor %}
-  
+          <br><br>
+        {% endwith %}
+      {% endif %}
+    {% endfor %}
+
   <div class="row">
     <div class="col-sm-9">
       {% for post in posts %}

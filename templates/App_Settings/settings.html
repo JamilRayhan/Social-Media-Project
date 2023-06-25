@@ -1,0 +1,34 @@
+{% extends 'navbar.html' %}
+{% load crispy_forms_tags %}
+
+{% block title_block %}{{ title }}{% endblock  %}
+
+{% block css_block %}
+<style>
+</style>
+{% endblock  %}
+
+{% block body_block %} 
+<h1>Settings</h1>
+<a href="#deleteModal" class='btn btn-danger btn-sm' data-bs-toggle="modal">Delete Your Account</a>
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Are you sure you want to delete your account?</h5>
+            </div>
+            <div class="modal-body">
+                <form method="POST">
+                    {% csrf_token %}
+                    <button type="submit" name="delete_account" class='btn btn-danger btn-sm'>Confirm</button>
+                    <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cancel</button>
+                  </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
