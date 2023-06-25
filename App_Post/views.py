@@ -16,9 +16,14 @@ def home(request):
     posts = Posts.objects.filter(author__in=following_list.values_list('following'))
     liked_post = Like.objects.filter(user=request.user)
     liked_post_list = liked_post.values_list('post', flat=True)
-    if request.method == 'GET':
-        search = request.GET.get('search', ' ')
-        result = User.objects.filter(username__icontains=search)
+    
+    search = request.GET.get('search', '')
+    if search:
+        users = User.objects.filter(username__icontains=search)
+        post = Posts.objects.filter(caption__icontains=f"#{search}")
+        result = list(users) + list(post)
+    else:
+        result = None
 
     context = {
         'title': 'News Feed',
@@ -30,6 +35,7 @@ def home(request):
     }
 
     return render(request, 'App_Post/home.html', context)
+
 
 
 
