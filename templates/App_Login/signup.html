@@ -4,36 +4,82 @@
 
 {% block css_block %}
 <style>
-    .sign_up{
+    .sign_up {
         width: 400px;
         border: 1px solid #ccc;
         border-radius: 10px;
         padding: 20px;
+        background-color: rgba(0, 31, 85, .7);
     }
-    .text{
+
+    .text {
         padding-bottom: 20px;
+        font-weight: lighter;
+        color: azure;
     }
-    .log_in{
+
+    .log_in {
         width: 400px;
         padding: 20px;
+    }
+
+    body {
+        background-image: url('/media/background_img/login_bg.jpg');
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: center;
+    }
+
+    .container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        min-height: 90vh;
+    }
+
+    .sign_up button {
+        width: 100%;
+        padding: 10px;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        font-size: 16px;
+        font-weight: bold;
+    }
+
+    .sign_up button:hover {
+        background-color: #0056b3;
+        cursor: pointer;
+    }
+
+    .log_in a {
+        text-decoration: none;
+        color: aqua;
+        font-weight: bold;
+    }
+
+    @media (max-width: 600px) {
+        .sign_up, .log_in {
+            width: 90%;
+        }
     }
 </style>
 {% endblock  %}
 
 {% block body_block %}
-
-<center>
-<div class="sign_up">
-    <h4 class="text">This site will helps you connect and share with the people in your life.</h4>
-<form method='POST'>
-    {{form|crispy}}
-    {% csrf_token %}
-    <button type="submit" style="width:100%" class="btn btn-primary btn-sm">Create Account</button>
-</form>
-</div>
-<div class="log_in">
-    <p>Have an account? <a href="{% url 'App_Login:login' %}">Login</a></p>
-</div>
+<center class="container">
+    <div class="sign_up">
+        <h4 class="text">This site will help you connect and share with the people in your life.</h4>
+        <form method='POST'>
+            {{form|crispy}}
+            {% csrf_token %}
+            <button type="submit" style="width:100%" class="btn btn-primary btn-sm">Create Account</button>
+        </form>
+    </div>
+    <div class="log_in text">
+        <p>Have an account? <a href="{% url 'App_Login:login' %}">Login</a></p>
+    </div>
 </center>
 {% endblock  %}
-

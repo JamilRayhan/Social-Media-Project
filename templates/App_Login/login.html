@@ -1,38 +1,85 @@
 {% extends 'base.html' %}
 {% load crispy_forms_tags %}
-{% block title_block %}{{title}}{% endblock  %}
+{% block title_block %}{{ title }}{% endblock  %}
 
 {% block css_block %}
 <style>
-    .sign_up{
+    .sign_up {
         width: 400px;
-        
         padding: 20px;
     }
-    .text{
-        padding-bottom: 20px;
+
+    .sign_up a {
+        text-decoration: none;
+        color: aqua;
+        font-weight: bold;
     }
-    .log_in{
+
+    .text {
+        padding-bottom: 20px;
+        font-weight: lighter;
+        color: azure;
+    }
+
+    .log_in {
         width: 400px;
         padding: 20px;
         border: 1px solid #ccc;
         border-radius: 10px;
+        background-color: rgba(0, 31, 85, .7);
+    }
+
+    body {
+        background-image: url('/media/background_img/login_bg.jpg');
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: center;
+    }
+
+    .container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        min-height: 90vh;
+    }
+
+    .log_in button {
+        width: 100%;
+        padding: 10px;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        font-size: 16px;
+        font-weight: bold;
+    }
+
+    .log_in button:hover {
+        background-color: #0056b3;
+        cursor: pointer;
+    }
+
+    @media (max-width: 600px) {
+        .sign_up, .log_in {
+            width: 90%;
+        }
     }
 </style>
 {% endblock  %}
 
 {% block body_block %}
-<center>
-<div class="log_in">
-    <h4 class="text">Login to connect and share.</h4>
-<form method='POST'>
-    {{form|crispy}}
-    {% csrf_token %}
-    <button type="submit" style="width:100%" class="btn btn-primary btn-sm">Log In</button>
-</form>
-</div>
-<div class="sign_up">
-    <p>Don't have an account? <a href="{% url 'App_Login:signup' %}">Sign up</a></p>
-</div>
+<center class="container">
+    <div class="log_in">
+        <h4 class="text">Login to connect and share.</h4>
+        <form method="POST">
+            {{ form|crispy }}
+            {% csrf_token %}
+            <button type="submit" style="width:100%" class="btn btn-primary btn-sm">Log In</button>
+        </form>
+    </div>
+    <div class="sign_up text">
+        <p>Don't have an account? <a href="{% url 'App_Login:signup' %}">Sign up</a></p>
+    </div>
 </center>
-{% endblock  %}
+{% endblock %}
