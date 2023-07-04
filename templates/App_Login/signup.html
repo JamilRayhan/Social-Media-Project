@@ -10,6 +10,7 @@
         border-radius: 10px;
         padding: 20px;
         background-color: rgba(0, 31, 85, .7);
+        text-align: center;
     }
 
     .text {
@@ -21,6 +22,7 @@
     .log_in {
         width: 400px;
         padding: 20px;
+        text-align: center;
     }
 
     body {
@@ -59,6 +61,12 @@
         color: aqua;
         font-weight: bold;
     }
+    .warning{
+        padding-bottom: 20px;
+        font-weight: lighter;
+        font-size: small;
+        color: azure;
+    }
 
     @media (max-width: 600px) {
         .sign_up, .log_in {
@@ -69,17 +77,18 @@
 {% endblock  %}
 
 {% block body_block %}
-<center class="container">
+<div class="container">
     <div class="sign_up">
         <h4 class="text">This site will help you connect and share with the people in your life.</h4>
         <form method='POST'>
             {{form|crispy}}
             {% csrf_token %}
+            <p class="warning">By clicking Create Account, you agree to our Terms, Privacy Policy and Cookies Policy. You may receive SMS notifications from us and can opt out at any time.</p>
             <button type="submit" style="width:100%" class="btn btn-primary btn-sm">Create Account</button>
         </form>
     </div>
     <div class="log_in text">
         <p>Have an account? <a href="{% url 'App_Login:login' %}">Login</a></p>
     </div>
-</center>
+</div>
 {% endblock  %}

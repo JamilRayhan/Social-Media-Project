@@ -7,6 +7,7 @@
     .sign_up {
         width: 400px;
         padding: 20px;
+        text-align: center;
     }
 
     .sign_up a {
@@ -19,6 +20,7 @@
         padding-bottom: 20px;
         font-weight: lighter;
         color: azure;
+        text-align: center;
     }
 
     .log_in {
@@ -69,7 +71,8 @@
 {% endblock  %}
 
 {% block body_block %}
-<center class="container">
+
+<div class="container">
     <div class="log_in">
         <h4 class="text">Login to connect and share.</h4>
         <form method="POST">
@@ -79,7 +82,7 @@
         </form>
     </div>
     <div class="sign_up text">
-        <p>Don't have an account? <a href="{% url 'App_Login:signup' %}">Sign up</a></p>
+        <p>Don't have an account? <a href="{% url 'App_Login:signup' %}">Create Account</a></p>
     </div>
-</center>
+</div>
 {% endblock %}

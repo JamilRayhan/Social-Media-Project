@@ -16,6 +16,10 @@
   .profile_link {
     padding: 10px;
   }
+  .searchresult{
+    border: 1px solid black;
+    margin-bottom: 10px;
+  }
 </style>
 {% endblock %}
 
@@ -25,15 +29,15 @@
         {% with user=result_item %}
           {% if user.user_profile %}
             {% if user != request.user %}
-              <div class="row">
+              <div class="row searchresult">
                 <div>
                   {% if user.user_profile.profile_pic %}
                     <a href="{% url 'App_Login:user' username=user.username %}">
-                      <img src="/media/{{ user.user_profile.profile_pic }}" width="40px" height="40px" class="rounded-circle"> {{ user.user_profile.full_name }}
+                      <img src="/media/{{ user.user_profile.profile_pic }}" width="40px" height="40px" class="rounded-circle">  {{user.username}}
                     </a>
                   {% else %}
                     <a href="{% url 'App_Login:user' username=user.username %}">
-                      <img src="/media/default.png" width="40px" height="40px" class="rounded-circle"> {{ user.user_profile.full_name }}
+                      <img src="/media/default.png" width="40px" height="40px" class="rounded-circle"> {{user.username}}
                     </a>
                   {% endif %}
                   <br>
@@ -43,6 +47,7 @@
           {% endif %}
         {% endwith %}
       {% else %}
+      <div class="searchresult">
         {% with post=result_item %}
           <div class="search-posts">
             <div class="profile_link">
@@ -59,6 +64,7 @@
           </div>
           <br><br>
         {% endwith %}
+      </div>
       {% endif %}
     {% endfor %}
 
