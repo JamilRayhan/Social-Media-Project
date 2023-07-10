@@ -12,31 +12,48 @@ from .context_processors import base_context
 
 @login_required
 def home(request):
+    if 'search' in request.GET:
+        search_query = request.GET.get('search', '')
+        return redirect('App_Post:search_results', search_query=search_query)
+
     following_list = Follow.objects.filter(follower=request.user)
-    posts = Posts.objects.filter(author__in=following_list.values_list('following'))
+    follower_list = Follow.objects.filter(following=request.user)
+    following_users = following_list.values_list('following', flat=True)
+    follower_users = follower_list.values_list('follower', flat=True)
+
+    posts = Posts.objects.filter(author__in=following_users)
     liked_post = Like.objects.filter(user=request.user)
     liked_post_list = liked_post.values_list('post', flat=True)
-    
-    search = request.GET.get('search', '')
-    if search:
-        users = User.objects.filter(username__icontains=search)
-        post = Posts.objects.filter(caption__icontains=f"#{search}")
-        result = list(users) + list(post)
-    else:
-        result = None
+
+    peoples = User.objects.exclude(id__in=following_users).exclude(id=request.user.id)
 
     context = {
         'title': 'News Feed',
-        'search': search,
-        'result': result,
         'posts': posts,
         'liked_post_list': liked_post_list,
-        **base_context(request)  
+        'peoples': peoples,
+        'follower_list': follower_users,
+        **base_context(request)
     }
 
     return render(request, 'App_Post/home.html', context)
 
 
+@login_required
+def search_results(request):
+    search_query = request.GET.get('search', '')
+    users = User.objects.filter(username__icontains=search_query)
+    posts = Posts.objects.filter(caption__icontains=f"#{search_query}")
+
+    context = {
+        'title': 'Search Results',
+        'search_query': search_query,
+        'users': users,
+        'posts': posts,
+        **base_context(request)
+    }
+
+    return render(request, 'App_Post/search_results.html', context)
 
 
 @login_required
@@ -49,7 +66,8 @@ def liked(request, pk):
 
         # Create a notification for the author of the post
         if post.author != request.user:
-            notification = Notification(user=post.author, notification_type='Like', target=request.user, post=post)
+            notification = Notification(
+                user=post.author, notification_type='Like', target=request.user, post=post)
             notification.save()
 
     return redirect(request.META['HTTP_REFERER'])
@@ -61,8 +79,7 @@ def unlike(request, pk):
     already_liked = Like.objects.filter(post=post, user=request.user)
     already_liked.delete()
 
-    return redirect(request.META['HTTP_REFERER']) 
-
+    return redirect(request.META['HTTP_REFERER'])
 
 
 @login_required
@@ -76,18 +93,20 @@ def add_comment(request, post_id):
 
         # Create a notification for the author of the post
         if post.author != request.user:
-            notification = Notification(user=post.author, notification_type='Comment', target=request.user, post=post, comment=comment)
+            notification = Notification(
+                user=post.author, notification_type='Comment', target=request.user, post=post, comment=comment)
             notification.save()
 
-        return redirect(request.META['HTTP_REFERER'])  # Redirect to the previous page
+        # Redirect to the previous page
+        return redirect(request.META['HTTP_REFERER'])
 
     return render(request, 'App_Post/home.html')
- 
+
 
 @login_required
 def notifications(request):
     notifications = Notification.objects.filter(user=request.user)
-    unread_notifications = notifications.filter(is_new=True , user=request.user)
+    unread_notifications = notifications.filter(is_new=True, user=request.user)
     unread_notifications_count = unread_notifications.count()
     for notification in unread_notifications:
         notification.is_new = False
@@ -96,10 +115,9 @@ def notifications(request):
         'notifications': notifications,
         'unread_notifications': unread_notifications,
         'unread_notifications_count': unread_notifications_count,
-        **base_context(request)  
+        **base_context(request)
     }
     return render(request, 'App_Post/notifications.html', context)
-
 
 
 @login_required
@@ -125,9 +143,9 @@ def edit_post(request, post_id):
         form = PostForm(instance=post)
     context = {
         'form': form,
-        **base_context(request)  
-        }
-    return render(request, 'App_Post/edit_post.html', context )
+        **base_context(request)
+    }
+    return render(request, 'App_Post/edit_post.html', context)
 
 
 @login_required
@@ -135,6 +153,6 @@ def post_details(request, post_id):
     post = get_object_or_404(Posts, pk=post_id)
     context = {
         'post': post,
-        **base_context(request)  
-        }
+        **base_context(request)
+    }
     return render(request, 'App_Post/post_details.html', context)

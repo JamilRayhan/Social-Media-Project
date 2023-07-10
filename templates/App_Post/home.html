@@ -6,75 +6,132 @@
 {% block css_block %}
 <style>
   .posts {
-    border: 1px solid #120e0e;
-  }
-  .search-posts{
-    border: 1px solid #6f0505;
-    width: 200px;
-    height: auto;
+    border: 1px solid #000000;
+    border-radius: 10px;
+    background-color: #434040;
   }
   .profile_link {
     padding: 10px;
+    display: block;
+    margin: 0 auto;
   }
-  .searchresult{
+  .profile_link a{
+    text-decoration: none;
+    color: #ffffff;
+  }
+  .date{
+    color: #ffffff;
+  }
+  .username {
+    font-weight: bold;
+    font-size: 18px;
+    margin-bottom: 5px;
+  }
+  .username a:hover {
+    text-decoration: underline;
+  }
+  .image{
+    width:120px;
+    height: 120px;
+    display: block;
+    margin: 10px auto;
+    
+  }
+  .text{
+    color: aliceblue;
+    text-align: center;
+    padding: 30px;
+  }
+  .profile{
     border: 1px solid black;
+    border-radius: 10px;
+    background-color: #434040;
+  }
+  .caption{
+    padding: 10px 20px;
+    color: azure;
+  }
+  .image-container{
+    box-shadow: 0 10px 10px -10px rgb(0, 0, 0);
+  }
+  .image-container img {
+    object-fit: cover;
+  }
+  footer {
+    background-color: #434040;
+    padding: 20px;
+    color: #ffffff;
+    border-radius: 10px;
+  }
+  
+  .footer-content {
+    text-align: center;
+    margin: 0 auto;
+  }
+  
+  .footer-section {
+    width: 100%;
+    margin-bottom: 20px;
+  }
+  
+  .footer-section h4 {
     margin-bottom: 10px;
   }
+  
+  .social-media-icons a {
+    color: #000000;
+    font-size: 24px;
+    margin-right: 10px;
+  }
+  
+  .footer-bottom {
+    background-color: #4d4b4b;
+    padding: 10px 0;
+    text-align: center;
+    border-radius: 10px;
+  }
+  
+  .people{
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 10px;
+    background-color: #434040;
+    color: #ffffff;
+  }
+  .peopletext{
+    padding: 15px;
+  }
+  .suggestions{
+    padding-top: 10px;
+    padding-left: 20px;
+  }
+
 </style>
 {% endblock %}
 
 {% block body_block %}
-    {% for result_item in result %}
-      {% if result_item.user_profile %}
-        {% with user=result_item %}
-          {% if user.user_profile %}
-            {% if user != request.user %}
-              <div class="row searchresult">
-                <div>
-                  {% if user.user_profile.profile_pic %}
-                    <a href="{% url 'App_Login:user' username=user.username %}">
-                      <img src="/media/{{ user.user_profile.profile_pic }}" width="40px" height="40px" class="rounded-circle">  {{user.username}}
-                    </a>
-                  {% else %}
-                    <a href="{% url 'App_Login:user' username=user.username %}">
-                      <img src="/media/default.png" width="40px" height="40px" class="rounded-circle"> {{user.username}}
-                    </a>
-                  {% endif %}
-                  <br>
-                </div>
-              </div>
-            {% endif %}
-          {% endif %}
-        {% endwith %}
-      {% else %}
-      <div class="searchresult">
-        {% with post=result_item %}
-          <div class="search-posts">
-            <div class="profile_link">
-              <div class="row">
-                <div class="col-sm-11">
-                  <a href="{% url 'App_Login:user' username=post.author %}">{{ post.author }}</a>
-                </div>
-              </div>
-            </div>
-            <div style="padding: 10px 20px;">
-              <p>{{ post.caption }}</p>
-            </div>
-            <a href="{% url 'App_Post:post_details' post_id=post.pk %}"><img src="{{ post.image.url }}" width="100%"></a>
-          </div>
-          <br><br>
-        {% endwith %}
-      </div>
-      {% endif %}
-    {% endfor %}
-
   <div class="row">
-    <div class="col-sm-9">
+    <div  class="col-sm-3" >
+      <div class="profile">
+        {% if request.user.user_profile.profile_pic %}
+            <img src="/media/{{ request.user.user_profile.profile_pic }}"  class="rounded-circle image">
+          {% else %}
+            <img src="/media/default.png" width="100%" height="auto" class="rounded-circle image">
+          {% endif %}
+          <div class="text">
+            <h3><strong>{{ request.user.user_profile.full_name }} </strong></h3>
+            {{ request.user.user_profile.description|linebreaks }}
+            <hr>
+            Connections : {{ request.user.following.count }} 
+          </div>
+      </div>
+    </div>
+    <div class="col-sm-6">
       {% for post in posts %}
         <div class="posts">
           <div class="profile_link">
             <div class="row">
-              <div class="col-sm-1">
+              <div class="col-sm-2">
                 {% if post.author.user_profile.profile_pic %}
                   <a href="{% url 'App_Login:user' username=post.author %}">
                     <img src="/media/{{ post.author.user_profile.profile_pic }}" width="70px" height="70px" class="rounded-circle">
@@ -85,33 +142,36 @@
                   </a>
                 {% endif %}
               </div>
-              <div class="col-sm-11">
-                <a href="{% url 'App_Login:user' username=post.author %}">{{ post.author }}</a>
-                <br>
-                {{ post.upload_date }}
+              <div class="col-sm-10">
+                <h5><strong><a href="{% url 'App_Login:user' username=post.author %}">{{ post.author }}</a></strong></h5>
+                <div class="date">
+                  {{ post.upload_date }}
+                </div>
+                
               </div>
             </div>
           </div>
-          <div style="padding: 10px 20px;">
+          <div class="caption">
             <p>{{ post.caption }}</p>
           </div>
-          <a href="{% url 'App_Post:post_details' post_id=post.pk %}"><img src="{{ post.image.url }}" width="100%"></a>
-          
+          <div class="image-container">
+            <a href="{% url 'App_Post:post_details' post_id=post.pk %}" class="pic"><img src="{{ post.image.url }}" width="100%"></a>
+          </div>
           <div style="padding: 20px;">
             {% if post.pk in liked_post_list %}
-              <a href="{% url 'App_Post:unlike' pk=post.pk %}"><i class="fa fa-heart" style="font-size: 36px;"></i></a>
+              <a href="{% url 'App_Post:unlike' pk=post.pk %}"><i class="fa fa-heart" style="font-size: 36px;color: rgb(0, 0, 0);"></i></a>
             {% else %}
-              <a href="{% url 'App_Post:liked' pk=post.pk %}"><i class="fa fa-heart-o" style="font-size: 36px;"></i></a>
+              <a href="{% url 'App_Post:liked' pk=post.pk %}"><i class="fa fa-heart-o" style="font-size: 36px;color: rgb(255, 255, 255);"></i></a>
             {% endif %}
             &nbsp; &nbsp; &nbsp;
-            <a href="{% url 'App_Post:post_details' post_id=post.pk %}"><i class="fa-regular fa-comment" style="font-size: 36px;"></i> </a>
+            <a href="{% url 'App_Post:post_details' post_id=post.pk %}"><i class="fa-regular fa-comment" style="font-size: 36px;color: rgb(255, 255, 255);"></i> </a>
             <br>
             {{ post.liked_post.count }} Likes <br>
 
              <a href="{% url 'App_Post:post_details' post_id=post.pk %}">View all {{ post.comments.count }} Comments</a>
           </div>
             
-          <!-- Add Comment Section -->
+          <!--Add Comment Section -->
           <div>
             <form method="POST" action="{% url 'App_Post:add_comment' post_id=post.pk %}">
               {% csrf_token %}
@@ -125,20 +185,63 @@
     </div>
     
     <div class="col-sm-3">
-      <div class="row">
-        <div class="col-sm-6">
-          {% if request.user.user_profile.profile_pic %}
-            <img src="/media/{{ request.user.user_profile.profile_pic }}" width="100%" height="100%" class="">
+      <div class="people">
+        <div class="peopletext">
+          <h3>Suggested for you</h3>
+        </div>
+        
+        {% for people in peoples %}
+        <div class="row suggestions">
+          <div class="col-sm-2">
+          {% if people.user_profile.profile_pic %}
+            <a class="dropdown-item" href="{% url 'App_Login:user' username=people.username %}">
+              <img src="/media/{{ people.user_profile.profile_pic }}" width="40px" height="40px" class="rounded-circle">
+            </a>
           {% else %}
-            <img src="/media/default.png" width="100%" height="100%" class="">
+            <a class="dropdown-item" href="{% url 'App_Login:user' username=people.username %}">
+              <img src="/media/default.png" width="40px" height="40px" class="rounded-circle">
+            </a>
           {% endif %}
+          </div>
+          <div class="col-sm-6">
+            <strong>{{ people.username }}</strong> 
+            <br>
+            {{ people.user_profile.description|linebreaksbr|truncatechars_html:28  }}
+          </div>
+          <div class="col-sm-4">
+            <a href="{% url 'App_Login:follow' username=people.username %}" class="btn btn-primary btn-sm">Follow</a>
+          </div>
         </div>
-        <div class="col-sm-6">
-          {{ request.user.username }}
-          <br>
-          {{ request.user.user_profile.full_name }}
-        </div>
+        {% endfor %}
+        
       </div>
+    
+    
+      <footer>
+        <div class="footer-content">
+          <div class="footer-section">
+            <h4>About Us</h4>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce at eros euismod, lobortis arcu et, commodo enim.</p>
+          </div>
+          <div class="footer-section">
+            <h4>Contact</h4>
+            <p>Email: info@example.com</p>
+            <p>Phone: 123-456-7890</p>
+          </div>
+          <div class="footer-section">
+            <h4>Follow Us</h4>
+            <div class="social-media-icons">
+              <a href="#"><i class="fab fa-facebook"></i></a>
+              <a href="#"><i class="fab fa-twitter"></i></a>
+              <a href="#"><i class="fab fa-instagram"></i></a>
+              <a href="#"><i class="fab fa-linkedin"></i></a>
+            </div>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <p> <a href="/">FriendCircle</a> &copy; Copyright 2023.</p>
+        </div>
+      </footer>
     </div>
   </div>
 {% endblock %}

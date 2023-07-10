@@ -1,0 +1,41 @@
+{% extends 'navbar.html' %}
+{% load crispy_forms_tags %}
+
+{% block title_block %}Search Results{% endblock  %}
+
+{% block css_block %}
+<style>
+    /* Add your custom CSS styles here */
+</style>
+{% endblock  %}
+
+{% block body_block %} 
+<h1>Search Results</h1>
+<p>Showing results for: <strong>{{ search_query }}</strong></p>
+
+{% if users %}
+  <h2>Users</h2>
+  {% for user in users %}
+    <a href="{% url 'App_Login:user' username=user.username %}">{{ user.username }}</a><br>
+  {% empty %}
+    <p>No users found.</p>
+  {% endfor %}
+{% endif %}
+
+{% if posts %}
+  <h2>Posts</h2>
+  {% for post in posts %}
+  <div class="row">
+    <div class="col-sm-11">
+      <a href="{% url 'App_Login:user' username=post.author %}">{{ post.author }}</a>
+    </div>
+  </div>
+  <div style="padding: 10px 20px;">
+    <p>{{ post.caption }}</p>
+  </div>
+  <a href="{% url 'App_Post:post_details' post_id=post.pk %}"><img src="{{ post.image.url }}" width="100%"></a>
+</div>
+<br><br> 
+{% endfor %}
+{% endif %}
+{% endblock %}
