@@ -6,9 +6,9 @@ from App_Post.models import Posts, Like, Comment, Notification
 from django.contrib.auth.models import User
 from .forms import PostForm
 from .context_processors import base_context
+from django.db.models import Q
 
 # Create your views here.
-
 
 @login_required
 def home(request):
@@ -21,9 +21,19 @@ def home(request):
     following_users = following_list.values_list('following', flat=True)
     follower_users = follower_list.values_list('follower', flat=True)
 
-    posts = Posts.objects.filter(author__in=following_users)
+    posts = Posts.objects.filter(Q(author__in=following_users) | Q(author=request.user))
     liked_post = Like.objects.filter(user=request.user)
     liked_post_list = liked_post.values_list('post', flat=True)
+
+    if request.method == 'POST':
+        post_form = PostForm(request.POST, request.FILES)
+        if post_form.is_valid():
+            new_post = post_form.save(commit=False)
+            new_post.author = request.user
+            new_post.save()
+            return redirect('App_Post:home')
+    else:
+        post_form = PostForm()
 
     peoples = User.objects.exclude(id__in=following_users).exclude(id=request.user.id)
 
@@ -33,10 +43,12 @@ def home(request):
         'liked_post_list': liked_post_list,
         'peoples': peoples,
         'follower_list': follower_users,
+        'post_form': post_form,
         **base_context(request)
     }
 
     return render(request, 'App_Post/home.html', context)
+
 
 
 @login_required
@@ -45,15 +57,18 @@ def search_results(request):
     users = User.objects.filter(username__icontains=search_query)
     posts = Posts.objects.filter(caption__icontains=f"#{search_query}")
 
+    active_section = request.GET.get('section', '') 
     context = {
         'title': 'Search Results',
         'search_query': search_query,
         'users': users,
         'posts': posts,
+        'active_section': active_section,
         **base_context(request)
     }
 
     return render(request, 'App_Post/search_results.html', context)
+
 
 
 @login_required

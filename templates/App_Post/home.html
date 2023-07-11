@@ -20,7 +20,9 @@
     color: #ffffff;
   }
   .date{
-    color: #ffffff;
+    font-size: 12px;
+    letter-spacing: 0.5px;
+    color: #bebebe;
   }
   .username {
     font-weight: bold;
@@ -105,7 +107,93 @@
     padding-top: 10px;
     padding-left: 20px;
   }
+  .description{
+    font-size: 15px;
+    letter-spacing: 0.5px;
+    color: #d8d8d8;
+  }
+  .post-box {
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 10px;
+    padding-left: 200px;
+    padding-right: 200px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #000000;
+  }
+  
+  .post-box i {
+    font-size: 24px;
+    margin-right: 5px;
+  }
+  
+  .post-box span {
+    font-weight: bold;
+  }
+  .container{
+    background-color: #434040;
+    border-radius: 10px;
+    padding:  10px;
+    margin-bottom: 10px;
+  }
+  .container a{
+    text-decoration:none;
+  }
+  .modal-content{
+    background-color: #434040;
+  }
+  .modal-header{
+    display: flex;
+    margin: 0 auto;
+    color: #f8f9fa;
+  }
+  .custom-file-label {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    padding: 8px 16px;
+    border-radius: 4px;
+    margin-bottom: 50px;
+}
 
+.select-images-button {
+    display: flex;
+    align-items: center;
+}
+
+.select-images-button i {
+    color: #fff;
+}
+.pimg{
+  opacity: 0;
+}
+.custom-button{
+  margin-top: 10px;
+  width: 100%;
+}
+.likecount{
+  color: aliceblue;
+  padding-top: 10px;
+  font-weight: 600;
+  margin-bottom: -1rem;
+  text-decoration: none;
+
+}
+.cform{
+  display: flex;
+  margin: 10px;
+  border-radius: 5px;
+  width: 97%;
+  color: #fff;
+  background-color:  #403e3e;
+  height: 50px;
+  border-top: none;
+}
 </style>
 {% endblock %}
 
@@ -120,13 +208,65 @@
           {% endif %}
           <div class="text">
             <h3><strong>{{ request.user.user_profile.full_name }} </strong></h3>
-            {{ request.user.user_profile.description|linebreaks }}
+            <div class="description">
+              {{ request.user.user_profile.description|linebreaks }}
+            </div>
             <hr>
             Connections : {{ request.user.following.count }} 
           </div>
       </div>
     </div>
     <div class="col-sm-6">
+      <div class="container mt-3">
+        {% if request.user.user_profile.profile_pic %}
+          <a href="{% url 'App_Login:user' username=request.user.username %}">
+            <img src="/media/{{ request.user.user_profile.profile_pic }}" width="70px" height="70px" class="rounded-circle">
+          </a>
+        {% else %}
+          <a href="{% url 'App_Login:user' username=request.user.username %}">
+            <img src="/media/default.png" width="70px" height="70px" class="rounded-circle">
+          </a>
+        {% endif %}
+        <!-- The Modal -->
+        <div class="modal" id="myModal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <!-- Modal Header -->
+                    <div class="modal-header">
+                        <h4 class="modal-title">Create new post</h4>
+                    </div>
+                    <!-- Modal body -->
+                    <div class="modal-body">
+                        <form method="POST" enctype="multipart/form-data">
+                            <p class="pimg">{{ post_form.image }}</p>
+                            <label class="custom-file-label" for="id_image">
+                              <div class="select-images-button">
+                                  <i class="fa fa-plus"></i>
+                                  <span class="text">Select images to share</span>
+                              </div>
+                            </label>
+                            
+                            <p class="pimg">{{ post_form.caption}}</p>
+                            <input type="text" name="caption" class="form-control" style="width: 100%; background-color: #e3e3e3;" placeholder="Caption">
+                            {% csrf_token %}
+                            <br>
+                            <button type="submit" class="btn btn-dark btn-sm custom-button">Post</button>
+                        </form>
+                    </div>
+                    <!-- Modal footer -->
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger btn-sm" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#myModal">
+          <div class="post-box">
+            <i class="fas fa-plus"></i>
+            <span>Post Photo</span>
+          </div>
+        </button>
+      </div>
       {% for post in posts %}
         <div class="posts">
           <div class="profile_link">
@@ -157,26 +297,28 @@
           <div class="image-container">
             <a href="{% url 'App_Post:post_details' post_id=post.pk %}" class="pic"><img src="{{ post.image.url }}" width="100%"></a>
           </div>
-          <div style="padding: 20px;">
+          <div style="padding: 20px; margin:10px;">
             {% if post.pk in liked_post_list %}
-              <a href="{% url 'App_Post:unlike' pk=post.pk %}"><i class="fa fa-heart" style="font-size: 36px;color: rgb(0, 0, 0);"></i></a>
+              <a href="{% url 'App_Post:unlike' pk=post.pk %}" >
+                  <i class="fa fa-heart" style="font-size: 36px;color: rgb(0, 0, 0);"></i>
+              </a>
             {% else %}
               <a href="{% url 'App_Post:liked' pk=post.pk %}"><i class="fa fa-heart-o" style="font-size: 36px;color: rgb(255, 255, 255);"></i></a>
             {% endif %}
             &nbsp; &nbsp; &nbsp;
-            <a href="{% url 'App_Post:post_details' post_id=post.pk %}"><i class="fa-regular fa-comment" style="font-size: 36px;color: rgb(255, 255, 255);"></i> </a>
+            <a href="{% url 'App_Post:post_details' post_id=post.pk %}"><i class="fa-regular fa-comment" style="font-size: 36px;color: rgb(255, 255, 255);"></i>
+             </a>
             <br>
-            {{ post.liked_post.count }} Likes <br>
+            <p class="likecount">{{ post.liked_post.count }} Likes </p><br>
 
-             <a href="{% url 'App_Post:post_details' post_id=post.pk %}">View all {{ post.comments.count }} Comments</a>
+             <a href="{% url 'App_Post:post_details' post_id=post.pk %}" class="likecount">View all {{ post.comments.count }} Comments</a>
           </div>
             
           <!--Add Comment Section -->
-          <div>
+          <div class="comment">
             <form method="POST" action="{% url 'App_Post:add_comment' post_id=post.pk %}">
               {% csrf_token %}
-              <textarea name="content" placeholder="Write a comment..." rows="2"></textarea>
-              <button type="submit" class="btn btn-primary">Comment</button>
+              <input name="content" class="cform" placeholder="Write a comment...">
             </form>
           </div>
         </div>
@@ -206,7 +348,7 @@
           <div class="col-sm-6">
             <strong>{{ people.username }}</strong> 
             <br>
-            {{ people.user_profile.description|linebreaksbr|truncatechars_html:28  }}
+            <p class="date">{{ people.user_profile.description|linebreaksbr|truncatechars_html:28  }}</p>
           </div>
           <div class="col-sm-4">
             <a href="{% url 'App_Login:follow' username=people.username %}" class="btn btn-primary btn-sm">Follow</a>
@@ -221,20 +363,20 @@
         <div class="footer-content">
           <div class="footer-section">
             <h4>About Us</h4>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce at eros euismod, lobortis arcu et, commodo enim.</p>
+            <p class="description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce at eros euismod, lobortis arcu et, commodo enim.</p>
           </div>
           <div class="footer-section">
             <h4>Contact</h4>
-            <p>Email: info@example.com</p>
-            <p>Phone: 123-456-7890</p>
+            <p class="description">Email: info@example.com</p>
+            <p class="description">Phone: 123-456-7890</p>
           </div>
           <div class="footer-section">
             <h4>Follow Us</h4>
             <div class="social-media-icons">
-              <a href="#"><i class="fab fa-facebook"></i></a>
-              <a href="#"><i class="fab fa-twitter"></i></a>
-              <a href="#"><i class="fab fa-instagram"></i></a>
-              <a href="#"><i class="fab fa-linkedin"></i></a>
+              <a href="https://www.facebook.com"><i class="fab fa-facebook"></i></a>
+              <a href="https://www.twitter.com"><i class="fab fa-twitter"></i></a>
+              <a href="https://www.instagram.com"><i class="fab fa-instagram"></i></a>
+              <a href="https://www.linkedin.com/"><i class="fab fa-linkedin"></i></a>
             </div>
           </div>
         </div>

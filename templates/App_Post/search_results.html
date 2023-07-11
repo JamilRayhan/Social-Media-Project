@@ -1,41 +1,109 @@
 {% extends 'navbar.html' %}
 {% load crispy_forms_tags %}
 
-{% block title_block %}Search Results{% endblock  %}
+{% block title_block %}{{ search_query }} | Search | firendcircle{% endblock %}
 
 {% block css_block %}
 <style>
-    /* Add your custom CSS styles here */
+    .text {
+        color: rgb(255, 255, 255);
+    }
+    .posts {
+        border: 1px solid black;
+        padding: 10px;
+        margin: 10px;
+        border-radius: 10px;
+        background-color: #404343;
+    }
+    .users {
+        border: 1px solid black;
+        padding: 10px;
+        margin: 10px;
+        border-radius: 10px;
+        background-color: #404343;
+    }
+    .head {
+        font-weight: 300;
+        font-size: 25px;
+    }
+    .menu {
+        border: 1px solid black;
+        padding: 10px;
+        margin: 10px;
+        border-radius: 10px;
+        background-color: #404343;
+    }
+    .row a {
+        text-decoration: none;
+        color: aliceblue;
+        font-weight: 500;
+    }
+    .button {
+        position: relative;
+        padding: 0.5em 1em;
+        border: 0;
+        border-radius: 0.5em;
+        background-color: #42434c;
+        box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.5);
+        cursor: pointer;
+    }
+    
+    .button:active,
+    .active {
+        top: 2px;
+        left: 1px;
+        box-shadow: none;
+    }
 </style>
-{% endblock  %}
+{% endblock %}
 
-{% block body_block %} 
-<h1>Search Results</h1>
-<p>Showing results for: <strong>{{ search_query }}</strong></p>
-
-{% if users %}
-  <h2>Users</h2>
-  {% for user in users %}
-    <a href="{% url 'App_Login:user' username=user.username %}">{{ user.username }}</a><br>
-  {% empty %}
-    <p>No users found.</p>
-  {% endfor %}
-{% endif %}
-
-{% if posts %}
-  <h2>Posts</h2>
-  {% for post in posts %}
-  <div class="row">
-    <div class="col-sm-11">
-      <a href="{% url 'App_Login:user' username=post.author %}">{{ post.author }}</a>
+{% block body_block %}
+<p class="text head">Showing results for: <strong>{{ search_query }}</strong></p>
+<div class="row">
+    <div class="col-sm-3">
+        <div class="menu">
+            <p class="text ">On this page</p><hr>
+            <a href="#postblock" class="btn button">Posts</a> <br>
+            <a href="#userblock" class="btn button">Users</a>
+        </div>
     </div>
-  </div>
-  <div style="padding: 10px 20px;">
-    <p>{{ post.caption }}</p>
-  </div>
-  <a href="{% url 'App_Post:post_details' post_id=post.pk %}"><img src="{{ post.image.url }}" width="100%"></a>
+    <div class="col-sm-6">
+        <div class="posts">
+            <h2 class="text">Posts</h2>
+            {% if posts %}
+                {% for post in posts %}
+                <a href="{% url 'App_Login:user' username=post.author %}">{{ post.author }}</a>
+                <div style="padding: 10px 20px;">
+                    <p class="text">{{ post.caption }}</p>
+                </div>
+                <a href="{% url 'App_Post:post_details' post_id=post.pk %}"><img src="{{ post.image.url }}" width="100%"></a>
+                <br><br> <hr>
+                {% endfor %}
+            {% else %}
+                <h6 class="text">No posts found.</h6>
+            {% endif %}
+        </div>
+        <div class="users">
+            <h2 class="text" id="userblock">Users</h2>
+            {% if users %}
+                {% for user in users %}
+                <a href="{% url 'App_Login:user' username=user.username %}">{{ user.username }}</a><br>
+                {% endfor %}
+            {% else %}
+                <h6 class="text">No user found.</h6>
+            {% endif %}
+        </div>
+    </div>
+    <div class="col-sm-3"></div>
 </div>
-<br><br> 
-{% endfor %}
-{% endif %}
+{% endblock %}
+
+{% block script_block %}
+<script>
+    const button = document.querySelector('.button');
+
+    button.addEventListener('click', () => {
+        button.classList.toggle('active');
+    });
+</script>
 {% endblock %}
