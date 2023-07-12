@@ -6,14 +6,14 @@
 {% block css_block %}
 <style>
     .crop {
-        width: 500px;
+        width: 100%;
         height: auto;
         overflow: hidden;
         position: relative;
     }
     .crop img {
-        max-width: 90%;
-        max-height: 90%;
+        max-width: 100%;
+        max-height: 100%;
         width: auto;
         height: auto;
         display: block;
@@ -22,12 +22,182 @@
     .text{
         color:white;
     }
+    a{
+        text-decoration:none;
+    }
+    hr {
+        border: none;
+        height: 1px;
+        /* Set the hr color */
+        color: #fffdfd;  /* old IE */
+        background-color: #ffffff;  /* Modern Browsers */
+    }
+    .description{
+        font-weight: 300;
+        letter-spacing: 0.5px;
+        color: #aeaeae;
+    }
+    .container{
+        background-color: #434040;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .container a{
+        text-decoration:none;
+      }
+      .modal-content{
+        background-color: #434040;
+      }
+      .modal-header{
+        display: flex;
+        margin: 0 auto;
+        color: #f8f9fa;
+      }
+      .custom-file-label {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        padding: 8px 16px;
+        border-radius: 4px;
+        margin-bottom: 50px;
+    }
+    
+    .select-images-button {
+        display: flex;
+        align-items: center;
+    }
+    
+    .select-images-button i {
+        color: #fff;
+    }
+    .pimg{
+      opacity: 0;
+    }
+    .custom-button{
+        margin-top: 10px;
+        width: 100%;
+      }
+    .posts{
+        background-color: #404343;
+        padding: 15px;
+        margin: 10px;
+        border-radius: 10px;
+    }
+    .post{
+        background-color: #404343;
+        margin-bottom: 10px;
+        margin-left: 10px;
+        margin-right:10px ;
+        border-radius: 10px;
+    }
+    .post-box {
+        background-color: #f8f9fa;
+        border: 1px solid #dee2e6;
+        border-radius: 10px;
+        padding-left: 200px;
+        padding-right: 200px;
+        padding-top: 20px;
+        padding-bottom: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #000000;
+      }
+      
+      .post-box i {
+        font-size: 24px;
+        margin-right: 5px;
+      }
+      
+      .post-box span {
+        font-weight: bold;
+      }
+      body{
+        padding-top: 20px;
+      }
+      footer { 
+        margin: 10px;
+        margin-top: 15px;
+        background-color: #404343;
+        padding: 20px;
+        color: #ffffff;
+        border-radius: 10px;
+      }
+      
+      .footer-content {
+        text-align: center;
+        margin: 0 auto;
+      }
+      
+      .footer-section {
+        width: 100%;
+        margin-bottom: 20px;
+      }
+      
+      .footer-section h4 {
+        margin-bottom: 10px;
+      }
+      .description{
+        font-size: 15px;
+        letter-spacing: 0.5px;
+        color: #d8d8d8;
+    }
+      .social-media-icons a {
+        color: #000000;
+        font-size: 24px;
+        margin-right: 10px;
+      }
+      
+      .footer-bottom {
+        background-color: #4d4b4b;
+        padding: 10px 0;
+        text-align: center;
+        border-radius: 10px;
+      }
+      .pic{
+        padding-top: 10px;
+        padding-left: 20px;
+      }
+      .sm-text{
+        font-size: 12px;
+        letter-spacing: 0.5px;
+        color: #bebebe;
+      }
+      .bg-text{
+        padding-top: 15px;
+        font-weight: bold;
+        font-size: large;
+      }
+      .dots{
+        color: #fff;
+        font-weight: 900;
+        padding-right: 20px;
+        padding-top: 15px;
+      }
+      .buton{
+        display: flex;
+        border-radius: 5px;
+        width: 100%;
+        border: 1px solid black;
+        margin-bottom: 5px;
+        padding: 5px;
+        padding-right: 10px;
+        justify-content:center ;
+        color: #fff;
+        font-weight: bold;
+        background-color: #1a0202;
+        
+      }
+
 </style>
 {% endblock  %}
 
 {% block body_block %}
-<div class="row text">
-    <div class="col-sm-4">
+<div class="row text d-flex align-items-center">
+    <div class="col-sm-4  text-center">
         {% if user.user_profile.profile_pic %}
         <a class="dropdown-item" href="">
             <img src="/media/{{user.user_profile.profile_pic}}" width="250px" height="250px" class="rounded-circle">
@@ -39,14 +209,14 @@
         {% endif %}
     </div>
     <div class="col-sm-8">
-        <h3>{{ user.username }} &nbsp; <a href="{% url 'App_Login:edit' %}" class="btn btn-light btn-sm">Edit Profile</a></h3>
+        <h3>@{{ user.username }} &nbsp; <a href="{% url 'App_Login:edit' %}" class="btn btn-light btn-sm">Edit Profile</a></h3>
         <br>
         <h4>{{ user.post.count }} Posts &nbsp; &nbsp;
             <a href="#followerModal" data-bs-toggle="modal">{{ user.following.count }} Followers</a> &nbsp; &nbsp; 
             <a href="#followingModal" data-bs-toggle="modal">{{ user.follower.count }} Following</a></h4>
         <br>
         <h4>{{ user.user_profile.full_name }}</h4>
-        <h6>{{ user.user_profile.description|linebreaks }}</h6>
+        <h6 class="description">{{ user.user_profile.description|linebreaks }}</h6>
     </div>
 </div>
 <hr>
@@ -57,10 +227,9 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="followerModalLabel">Followers</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <ul>
+                <ul class="text">
                     {% for follower_username in follower_list %}
                         <li>{{ follower_username }}</li>
                     {% empty %}
@@ -81,10 +250,9 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="followingModalLabel">Following</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <ul>
+                <ul class="text">
                     {% for following_username in following_list %}
                         <li>{{ following_username }}</li>
                     {% empty %}
@@ -99,100 +267,151 @@
     </div>
 </div>
 
-<div class="container mt-3">
-    <!-- The Modal -->
-    <div class="modal" id="myModal">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <!-- Modal Header -->
-                <div class="modal-header">
-                    <h4 class="modal-title">Post a Photo</h4>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+<div class="row text">
+    <div class="col-sm-1"></div>
+    <div class="col-sm-4">
+        
+
+            <footer>
+                <div class="footer-content">
+                  <div class="footer-section">
+                    <h4>About Us</h4>
+                    <p class="description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce at eros euismod, lobortis arcu et, commodo enim.</p>
+                  </div>
+                  <div class="footer-section">
+                    <h4>Contact</h4>
+                    <p class="description">Email: info@example.com</p>
+                    <p class="description">Phone: 123-456-7890</p>
+                  </div>
+                  <div class="footer-section">
+                    <h4>Follow Us</h4>
+                    <div class="social-media-icons">
+                      <a href="https://www.facebook.com"><i class="fab fa-facebook"></i></a>
+                      <a href="https://www.twitter.com"><i class="fab fa-twitter"></i></a>
+                      <a href="https://www.instagram.com"><i class="fab fa-instagram"></i></a>
+                      <a href="https://www.linkedin.com/"><i class="fab fa-linkedin"></i></a>
+                    </div>
+                  </div>
                 </div>
-                <!-- Modal body -->
-                <div class="modal-body">
-                    <form method="POST" enctype="multipart/form-data">
-                        {{ post.as_p }}
-                        {% csrf_token %}
-                        <button type="submit" class="btn btn-primary btn-sm">Post</button>
-                    </form>
+                <div class="footer-bottom">
+                  <p> <a href="/">FriendCircle</a> &copy; Copyright 2023.</p>
                 </div>
-                <!-- Modal footer -->
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
-                </div>
-            </div>
-        </div>
+              </footer>
     </div>
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#myModal">Post Photo</button>
-    </div>
-
-<br>
-
-<div class="row">
-    {% for post in user.post.all %}
-        <div>
-            {% if user.user_profile.profile_pic %}
-                <a href="">
-                    <img src="/media/{{user.user_profile.profile_pic}}" width="40px" height="40px" class="rounded-circle"> {{user.username}}
-                </a>
-            {% else %}
-                <a href="">
-                    <img src="/media/default.png" width="40px" height="40px" class="rounded-circle"> {{user.username}}
-                </a>
-            {% endif %}
-            <br>
-        </div>
-
-        <div class="container mt-3">
-            <div class="modal" id="myModal{{ post.id }}">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <!-- Modal Header -->
-                        <div class="modal-header">
-                            <h4 class="modal-title"></h4>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                        </div>
-            
-                        <!-- Modal body -->
-                        <div class="modal-body">
-                            <div>
-                                <a href="{% url 'App_Post:edit_post' post_id=post.id %}" class="btn btn-primary">Edit</a>
-                                <a href="{% url 'App_Post:delete_post' post_id=post.id %}" class="btn btn-danger">Delete</a>
+    <div class="col-sm-6">
+        <div class="post">
+            <div class="container mt-3">
+                <!-- The Modal -->
+                <div class="modal" id="myModal">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <!-- Modal Header -->
+                            <div class="modal-header">
+                                <h4 class="modal-title">Create new post</h4>
                             </div>
-                        </div>
-            
-                        <!-- Modal footer -->
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                            <!-- Modal body -->
+                            <div class="modal-body">
+                                <form method="POST" enctype="multipart/form-data">
+                                    <p class="pimg">{{ post.image }}</p>
+                            <label class="custom-file-label" for="id_image">
+                              <div class="select-images-button">
+                                  <i class="fa fa-plus"></i>
+                                  <span class="text">Select images to share</span>
+                              </div>
+                            </label>
+                            <p class="pimg">{{ post.caption}}</p>
+                            <input type="text" name="caption" class="form-control" style="width: 100%; background-color: #e3e3e3;" placeholder="Caption">
+                                    
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-dark btn-sm custom-button">Post</button>
+                                </form>
+                            </div>
+                            <!-- Modal footer -->
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-danger btn-sm" data-bs-dismiss="modal">Close</button>
+                            </div>
                         </div>
                     </div>
                 </div>
+                <button type="button" class="btn " data-bs-toggle="modal" data-bs-target="#myModal">
+                    <div class="post-box">
+                        <i class="fas fa-plus"></i>
+                        <span>Post Photo</span>
+                    </div>
+                </button>
+            </div>          
+        </div>
+        <div class="posts">
+        {% for post in user.post.all %}
+        <div class="row">
+            <div class="col-sm-2 pic">
+                {% if user.user_profile.profile_pic %}
+                <a href="#">
+                    <img src="/media/{{user.user_profile.profile_pic}}" width="70px" height="70px" class="rounded-circle"> 
+                </a>
+                {% else %}
+                <a href="#">
+                    <img src="/media/default.png" width="70px" height="70px" class="rounded-circle"> 
+                </a>
+                {% endif %}
             </div>
-          <a type="link" class=" " data-bs-toggle="modal" data-bs-target="#myModal{{ post.id }}">
-              ...
-          </a>
-      </div>
-
+            <div class="col-sm-9 ">
+                <div class="bg-text">{{user.username}}</div>
+                <div class="sm-text">{{post.upload_date}}</div>
+            </div>
+            <div class="col-sm-1">
+                <div class="modal" id="myModal{{ post.id }}">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <!-- Modal body -->
+                            <div class="modal-body">
+                                <div>
+                                    <a href="{% url 'App_Post:edit_post' post_id=post.id %}" class="buton">Edit</a>
+                                </div>
+                                <div class="delete">
+                                    <a href="{% url 'App_Post:delete_post' post_id=post.id %}" class="buton">Delete</a>
+                                </div>
+                            </div>
+                
+                            <!-- Modal footer -->
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+              <a type="link" class="dots" data-bs-toggle="modal" data-bs-target="#myModal{{ post.id }}">
+                  ...
+              </a>
+          </div>
+            <br>
+        </div>
         <div class="crop">
           <p>{{ post.caption }}</p>
           <img src="/media/{{ post.image }}" class="" title="{{ post.caption }}">
             
           <div style="padding: 20px;">
             {% if post.pk in liked_post_list %}
-              <a href="{% url 'App_Post:unlike' pk=post.pk %}"><i class="fa fa-heart" style="font-size: 36px;"></i></a>
+              <a href="{% url 'App_Post:unlike' pk=post.pk %}"><i class="fa fa-heart" style="font-size: 36px; color:black;"></i></a>
             {% else %}
-              <a href="{% url 'App_Post:liked' pk=post.pk %}"><i class="fa fa-heart-o" style="font-size: 36px;"></i></a>
+              <a href="{% url 'App_Post:liked' pk=post.pk %}"><i class="fa fa-heart-o" style="font-size: 36px; color:white;"></i></a>
             {% endif %}
             &nbsp; &nbsp; &nbsp;
-            <a href="{% url 'App_Post:post_details' post_id=post.pk %}"><i class="fa-regular fa-comment" style="font-size: 36px;"></i> </a>
-            <br>{{ post.liked_post.count }} Likes <br>
-            <a href="{% url 'App_Post:post_details' post_id=post.pk %}">View all {{ post.comments.count }} Comments</a>
+            <a href="{% url 'App_Post:post_details' post_id=post.pk %}"><i class="fa-regular fa-comment" style="font-size: 36px; color:white;"></i> </a>
+            <br><p class="pic"></p>{{ post.liked_post.count }} Likes <br>
+            <a href="{% url 'App_Post:post_details' post_id=post.pk %}" class="text">View all {{ post.comments.count }} Comments</a>
             
           </div>
         </div>
-        <br>
+        <hr>
     {% endfor %}
+    
+</div>
+    </div>
+    <div class="col-sm-1">
+
+    </div>
+    
 </div>
 <br><br>
 {% endblock %}

@@ -86,7 +86,7 @@ def profile(request):
             post.author = request.user
             post.save()
             return HttpResponseRedirect(reverse('home'))
-    context = {
+    context = { 
         'title': request.user.username,
         'liked_post_list': liked_post_list,
         'post': post_form,
@@ -96,7 +96,7 @@ def profile(request):
     }
     return render(request, 'App_Login/user.html', context)
 
-
+ 
 @login_required
 def user(request, username):
     user_other = User.objects.get(username=username)
@@ -108,6 +108,7 @@ def user(request, username):
         follower=user_other)]
     liked_post = Like.objects.filter(user=request.user)
     liked_post_list = liked_post.values_list('post', flat=True)
+    
     if user_other == request.user:
         return HttpResponseRedirect(reverse('App_Login:profile'))
 

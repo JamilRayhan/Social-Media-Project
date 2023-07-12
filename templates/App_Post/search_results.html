@@ -116,7 +116,7 @@
         <div class="posts">
             <h2 class="text">Posts</h2> 
             {% if posts %}
-                {% for post in posts %}
+                {% for post in posts %}  
                 <hr>
                 <div class="row">
                     <div class="col-sm-2">
@@ -157,7 +157,7 @@
                         <div class="col-sm-1">
 
                         </div>
-
+ 
           <div class="col-sm-1">
           {% if user.user_profile.profile_pic %}
             <a class="dropdown-item" href="{% url 'App_Login:user' username=user.username %}">
