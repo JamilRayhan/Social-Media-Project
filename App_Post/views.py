@@ -56,14 +56,16 @@ def search_results(request):
     search_query = request.GET.get('search', '')
     users = User.objects.filter(username__icontains=search_query)
     posts = Posts.objects.filter(caption__icontains=f"#{search_query}")
-
-    active_section = request.GET.get('section', '') 
+    
+    following_list = Follow.objects.filter(follower=request.user)
+    following_users = following_list.values_list('following', flat=True)
+    not_followed = User.objects.exclude(id__in=following_users).exclude(id=request.user.id) 
     context = {
         'title': 'Search Results',
         'search_query': search_query,
         'users': users,
         'posts': posts,
-        'active_section': active_section,
+        'not_followed':not_followed ,
         **base_context(request)
     }
 

@@ -19,11 +19,14 @@
         display: block;
         margin: auto;
     }
+    .text{
+        color:white;
+    }
 </style>
 {% endblock  %}
 
 {% block body_block %}
-<div class="row">
+<div class="row text">
     <div class="col-sm-4">
         {% if user.user_profile.profile_pic %}
         <a class="dropdown-item" href="">

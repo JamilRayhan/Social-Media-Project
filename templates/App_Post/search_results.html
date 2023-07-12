@@ -38,72 +38,191 @@
         color: aliceblue;
         font-weight: 500;
     }
-    .button {
-        position: relative;
-        padding: 0.5em 1em;
-        border: 0;
-        border-radius: 0.5em;
-        background-color: #42434c;
-        box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.5);
-        cursor: pointer;
+
+    .post-box {
+        display: flex;
+        align-items: center;
+        justify-content: left;
+    }   
+      
+    .post-box span {
+        font-weight: bold;
     }
     
-    .button:active,
-    .active {
-        top: 2px;
-        left: 1px;
-        box-shadow: none;
+    footer {
+        margin: 10px;
+        background-color: #404343;
+        padding: 20px;
+        color: #ffffff;
+        border-radius: 10px;
+      }
+      
+      .footer-content {
+        text-align: center;
+        margin: 0 auto;
+      }
+      
+      .footer-section {
+        width: 100%;
+        margin-bottom: 20px;
+      }
+      
+      .footer-section h4 {
+        margin-bottom: 10px;
+      }
+      .description{
+        font-size: 15px;
+        letter-spacing: 0.5px;
+        color: #d8d8d8;
     }
+      .social-media-icons a {
+        color: #000000;
+        font-size: 24px;
+        margin-right: 10px;
+      }
+      
+      .footer-bottom {
+        background-color: #4d4b4b;
+        padding: 10px 0;
+        text-align: center;
+        border-radius: 10px;
+      }
+      hr {
+        border: none;
+        height: 1px;
+        /* Set the hr color */
+        color: #fffdfd;  /* old IE */
+        background-color: #ffffff;  /* Modern Browsers */
+      }
+      .date{
+        font-size: 12px;
+        letter-spacing: 0.5px;
+        color: #bebebe;
+      }
 </style>
 {% endblock %}
 
 {% block body_block %}
-<p class="text head">Showing results for: <strong>{{ search_query }}</strong></p>
+<p class="text head" id="postblock">Showing results for: <strong>{{ search_query }}</strong></p>
 <div class="row">
     <div class="col-sm-3">
         <div class="menu">
-            <p class="text ">On this page</p><hr>
-            <a href="#postblock" class="btn button">Posts</a> <br>
-            <a href="#userblock" class="btn button">Users</a>
+            <p class="text description">On this page</p><hr>
+            <a href="#postblock" class="post-box button"><span> Posts </span></a> <br>
+            <a href="#userblock" class="post-box button"> <span> Users </span></a>
         </div>
     </div>
     <div class="col-sm-6">
         <div class="posts">
-            <h2 class="text">Posts</h2>
+            <h2 class="text">Posts</h2> 
             {% if posts %}
                 {% for post in posts %}
-                <a href="{% url 'App_Login:user' username=post.author %}">{{ post.author }}</a>
+                <hr>
+                <div class="row">
+                    <div class="col-sm-2">
+                      {% if post.author.user_profile.profile_pic %}
+                        <a href="{% url 'App_Login:user' username=post.author %}">
+                          <img src="/media/{{ post.author.user_profile.profile_pic }}" width="70px" height="70px" class="rounded-circle">
+                        </a>
+                      {% else %}
+                        <a href="{% url 'App_Login:user' username=post.author %}">
+                          <img src="/media/default.png" width="70px" height="70px" class="rounded-circle">
+                        </a>
+                      {% endif %}
+                    </div>
+                    <div class="col-sm-10">
+                      <h5><strong><a href="{% url 'App_Login:user' username=post.author %}">{{ post.author }}</a></strong></h5>
+                      <div class="date">
+                        {{ post.upload_date }}
+                      </div>
+                      
+                    </div>
+                  </div>
                 <div style="padding: 10px 20px;">
                     <p class="text">{{ post.caption }}</p>
                 </div>
                 <a href="{% url 'App_Post:post_details' post_id=post.pk %}"><img src="{{ post.image.url }}" width="100%"></a>
-                <br><br> <hr>
+                <br><br> 
                 {% endfor %}
             {% else %}
-                <h6 class="text">No posts found.</h6>
+                <h6 class="text description">No posts found.</h6>
             {% endif %}
+            
         </div>
         <div class="users">
-            <h2 class="text" id="userblock">Users</h2>
+            <h2 class="text" id="userblock">Users</h2> 
             {% if users %}
-                {% for user in users %}
-                <a href="{% url 'App_Login:user' username=user.username %}">{{ user.username }}</a><br>
+                {% for user in users %}<hr>
+                    <div class="row suggestions">
+                        <div class="col-sm-1">
+
+                        </div>
+
+          <div class="col-sm-1">
+          {% if user.user_profile.profile_pic %}
+            <a class="dropdown-item" href="{% url 'App_Login:user' username=user.username %}">
+              <img src="/media/{{ user.user_profile.profile_pic }}" width="40px" height="40px" class="rounded-circle">
+            </a>
+          {% else %}
+            <a class="dropdown-item" href="{% url 'App_Login:user' username=user.username %}">
+              <img src="/media/default.png" width="40px" height="40px" class="rounded-circle">
+            </a>
+          {% endif %}
+          </div>
+          <div class="col-sm-8">
+            <strong class="text">{{ user.username }}</strong> 
+            <br>
+            <p class="date">{{ user.user_profile.description|linebreaksbr|truncatechars_html:52  }}</p>
+          </div>
+          <div class="col-sm-2">
+            {% if user != request.user %}
+                {% if user in not_followed %}
+                    <a href="{% url 'App_Login:follow' username=user.username %}" class="btn btn-primary btn-sm">Follow</a>
+                {% else %}
+                    <a href="{% url 'App_Login:unfollow' username=user.username %}" class="btn btn-secondary btn-sm">Unfollow</a>
+                {% endif %}
+            {% endif %}
+            
+          </div>
+        </div>
                 {% endfor %}
             {% else %}
-                <h6 class="text">No user found.</h6>
+                <h6 class="text description">No user found.</h6>
             {% endif %}
         </div>
     </div>
-    <div class="col-sm-3"></div>
+    <div class="col-sm-3">
+        <footer>
+            <div class="footer-content">
+              <div class="footer-section">
+                <h4>About Us</h4>
+                <p class="description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce at eros euismod, lobortis arcu et, commodo enim.</p>
+              </div>
+              <div class="footer-section">
+                <h4>Contact</h4>
+                <p class="description">Email: info@example.com</p>
+                <p class="description">Phone: 123-456-7890</p>
+              </div>
+              <div class="footer-section">
+                <h4>Follow Us</h4>
+                <div class="social-media-icons">
+                  <a href="https://www.facebook.com"><i class="fab fa-facebook"></i></a>
+                  <a href="https://www.twitter.com"><i class="fab fa-twitter"></i></a>
+                  <a href="https://www.instagram.com"><i class="fab fa-instagram"></i></a>
+                  <a href="https://www.linkedin.com/"><i class="fab fa-linkedin"></i></a>
+                </div>
+              </div>
+            </div>
+            <div class="footer-bottom">
+              <p> <a href="/">FriendCircle</a> &copy; Copyright 2023.</p>
+            </div>
+          </footer>
+    </div>
 </div>
 {% endblock %}
 
 {% block script_block %}
 <script>
-    const button = document.querySelector('.button');
-
-    button.addEventListener('click', () => {
-        button.classList.toggle('active');
-    });
+    
 </script>
 {% endblock %}
