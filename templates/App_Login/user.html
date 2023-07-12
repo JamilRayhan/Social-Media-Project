@@ -1,7 +1,7 @@
 {% extends 'navbar.html' %}
 {% load crispy_forms_tags %}
 
-{% block title_block %}{{ title }}{% endblock  %}
+{% block title_block %}{{ title }} | friendcircle{% endblock  %}
 
 {% block css_block %}
 <style>
@@ -191,7 +191,21 @@
         background-color: #1a0202;
         
       }
-
+      .profileinfo{
+        margin: 10px;
+        margin-top: 15px;
+        background-color: #404343;
+        padding: 10px;
+        color: #ffffff;
+        border-radius: 10px;
+      }
+      .bold{
+        font-weight: bold;
+        display: inline;
+      }
+      .info{
+        padding: 10px;
+      }
 </style>
 {% endblock  %}
 
@@ -238,7 +252,7 @@
                 </ul>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
@@ -261,7 +275,7 @@
                 </ul>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
@@ -270,9 +284,62 @@
 <div class="row text">
     <div class="col-sm-1"></div>
     <div class="col-sm-4">
-        
-
-            <footer>
+        <div class="profileinfo">
+            {% if request.user.user_profile.present_address %}
+              <div class="row info">
+                <div class="col-sm-1">
+                  <i class="fa-solid fa-house-chimney"> </i>
+                </div>
+                <div class="col-sm-11"> 
+                  Lives in  <p class="bold">{{request.user.user_profile.present_address}}</p>
+                </div>
+              </div>
+            {% endif %}
+            {% if request.user.user_profile.permanent_address %}
+                <div class="row info">
+                <div class="col-sm-1">
+                  <i class="fa-solid fa-location-dot"></i> 
+                </div>
+                <div class="col-sm-11">
+                  From <p class="bold">{{request.user.user_profile.permanent_address}}</p>
+                </div>
+                </div>
+            {% endif %}
+            {% if request.user.user_profile.dob %}
+                <div class="row info">
+                  <div class="col-sm-1">
+                    <i class="fa-solid fa-calendar-days"></i>
+                  </div>
+                  <div class="col-sm-11"> 
+                    Date of Birth - <p class="bold">{{request.user.user_profile.dob}}</p>
+                  </div>
+                </div>
+            {% endif %}
+            {% if request.user.user_profile.facebook %}
+                <div class="row info">
+                  <div class="col-sm-1">
+                    <i class="fa-brands fa-facebook"></i> 
+                  </div>
+                  <div class="col-sm-11">
+                    Facebook <p class="bold">{{request.user.user_profile.facebook}}</p>
+                  </div>
+                  
+                </div>
+            {% endif %}
+            {% if request.user.user_profile.website %}
+                <div class="row info">
+                  <div class="col-sm-1">
+                    <i class="fa-solid fa-link"></i> 
+                  </div>
+                  <div class="col-sm-11">
+                    Other Links <p class="bold">{{request.user.user_profile.website}}</p>
+                  </div>
+                </div>
+            {% endif %}
+            
+        </div>
+        <div>
+           <footer>
                 <div class="footer-content">
                   <div class="footer-section">
                     <h4>About Us</h4>
@@ -296,7 +363,9 @@
                 <div class="footer-bottom">
                   <p> <a href="/">FriendCircle</a> &copy; Copyright 2023.</p>
                 </div>
-              </footer>
+              </footer>  
+        </div>
+           
     </div>
     <div class="col-sm-6">
         <div class="post">
@@ -388,8 +457,7 @@
         </div>
         <div class="crop">
           <p>{{ post.caption }}</p>
-          <img src="/media/{{ post.image }}" class="" title="{{ post.caption }}">
-            
+          <a href="{% url 'App_Post:post_details' post_id=post.pk %}"><img src="/media/{{ post.image }}" class="" title="{{ post.caption }}"></a>
           <div style="padding: 20px;">
             {% if post.pk in liked_post_list %}
               <a href="{% url 'App_Post:unlike' pk=post.pk %}"><i class="fa fa-heart" style="font-size: 36px; color:black;"></i></a>
@@ -411,7 +479,6 @@
     <div class="col-sm-1">
 
     </div>
-    
 </div>
 <br><br>
 {% endblock %}

@@ -1,33 +1,212 @@
 {% extends 'navbar.html' %}
 {% load crispy_forms_tags %}
 
-{% block title_block %}{{ title }}{% endblock %}
+{% block title_block %}{{ title }} | friendcircle{% endblock %}
 
 {% block css_block %}
 <style>
     .crop {
-        width: 500px;
+        width: 100%;
         height: auto;
         overflow: hidden;
         position: relative;
     }
     .crop img {
-        max-width: 90%;
-        max-height: 90%;
+        max-width: 100%;
+        max-height: 100%;
         width: auto;
         height: auto;
         display: block;
         margin: auto;
     }
+    .text{
+        color:white;
+    }
+    a{
+        text-decoration:none;
+    }
+    hr {
+        border: none;
+        height: 1px;
+        /* Set the hr color */
+        color: #fffdfd;  /* old IE */
+        background-color: #ffffff;  /* Modern Browsers */
+    }
+    .description{
+        font-weight: 300;
+        letter-spacing: 0.5px;
+        color: #aeaeae;
+    }
+    .container{
+        background-color: #434040;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .container a{
+        text-decoration:none;
+    }
+    .modal-content{
+        background-color: #434040;
+    }
+    .modal-header{
+        display: flex;
+        margin: 0 auto;
+        color: #f8f9fa;
+    }
+    .custom-file-label {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        padding: 8px 16px;
+        border-radius: 4px;
+        margin-bottom: 50px;
+    }
+    .select-images-button {
+        display: flex;
+        align-items: center;
+    }
+    .select-images-button i {
+        color: #fff;
+    }
+    .pimg{
+        opacity: 0;
+    }
+    .custom-button{
+        margin-top: 10px;
+        width: 100%;
+    }
+    .posts{
+        background-color: #404343;
+        padding: 15px;
+        margin: 10px;
+        margin-top:15px;
+        border-radius: 10px;
+    }
+    .post{
+        background-color: #404343;
+        margin-bottom: 10px;
+        margin-left: 10px;
+        margin-right:10px ;
+        border-radius: 10px;
+    }
+    .post-box {
+        background-color: #f8f9fa;
+        border: 1px solid #dee2e6;
+        border-radius: 10px;
+        padding-left: 200px;
+        padding-right: 200px;
+        padding-top: 20px;
+        padding-bottom: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #000000;
+    }
+    .post-box i {
+        font-size: 24px;
+        margin-right: 5px;
+    }
+    .post-box span {
+        font-weight: bold;
+    }
+    body{
+        padding-top: 20px;
+    }
+    footer { 
+        margin: 10px;
+        margin-top: 15px;
+        background-color: #404343;
+        padding: 20px;
+        color: #ffffff;
+        border-radius: 10px;
+    }
+    .footer-content {
+        text-align: center;
+        margin: 0 auto;
+    }
+    .footer-section {
+        width: 100%;
+        margin-bottom: 20px;
+    }
+    .footer-section h4 {
+        margin-bottom: 10px;
+    }
+    .description{
+        font-size: 15px;
+        letter-spacing: 0.5px;
+        color: #d8d8d8;
+    }
+    .social-media-icons a {
+        color: #000000;
+        font-size: 24px;
+        margin-right: 10px;
+    }
+    .footer-bottom {
+        background-color: #4d4b4b;
+        padding: 10px 0;
+        text-align: center;
+        border-radius: 10px;
+    }
+    .pic{
+        padding-top: 10px;
+        padding-left: 20px;
+    }
+    .sm-text{
+        font-size: 12px;
+        letter-spacing: 0.5px;
+        color: #bebebe;
+    }
+    .bg-text{
+        padding-top: 15px;
+        font-weight: bold;
+        font-size: large;
+    }
+    .dots{
+        color: #fff;
+        font-weight: 900;
+        padding-right: 20px;
+        padding-top: 15px;
+    }
+    .buton{
+        display: flex;
+        border-radius: 5px;
+        width: 100%;
+        border: 1px solid black;
+        margin-bottom: 5px;
+        padding: 5px;
+        padding-right: 10px;
+        justify-content:center ;
+        color: #fff;
+        font-weight: bold;
+        background-color: #1a0202;
+    }
+    .profileinfo{
+        margin: 10px;
+        margin-top: 15px;
+        background-color: #404343;
+        padding: 10px;
+        color: #ffffff;
+        border-radius: 10px;
+    }
+    .bold{
+        font-weight: bold;
+        display: inline;
+    }
+    .info{
+        padding: 10px;
+    }
 </style>
 {% endblock %}
 
 {% block body_block %}
-<div class="row">
-    <div class="col-sm-4">
+<div class="row text d-flex align-items-center">
+    <div class="col-sm-4  text-center">
         {% if user_other.user_profile.profile_pic %}
         <a class="dropdown-item" href="">
-            <img src="/media/{{ user_other.user_profile.profile_pic }}" width="250px" height="250px" class="rounded-circle">
+            <img src="/media/{{user_other.user_profile.profile_pic}}" width="250px" height="250px" class="rounded-circle">
         </a>
         {% else %}
         <a class="dropdown-item" href="">
@@ -36,12 +215,12 @@
         {% endif %}
     </div>
     <div class="col-sm-8">
-        <h3>{{ user_other.username }} &nbsp;
+        <h3>@{{ user_other.username }} &nbsp; 
             {% if not already_followed %}
             <a href="{% url 'App_Login:follow' username=user_other.username %}" class="btn btn-primary btn-sm">Follow</a>
             {% else %}
             <a href="{% url 'App_Message:send_message' username=user_other.username %}" class="btn btn-primary btn-sm">Message</a>
-            <a href="{% url 'App_Login:unfollow' username=user_other.username %}" class="btn btn-primary btn-sm">Unfollow</a>
+            <a href="{% url 'App_Login:unfollow' username=user_other.username %}" class="btn btn-secondary btn-sm">Unfollow</a>
             {% endif %}
         </h3>
         <br>
@@ -51,7 +230,7 @@
         </h4>
         <br>
         <h4>{{ user_other.user_profile.full_name }}</h4>
-        <h6>{{ user_other.user_profile.description|linebreaks }}</h6>
+        <h6 class="description">{{ user_other.user_profile.description|linebreaks }}</h6>
     </div>
 </div>
 <hr>
@@ -62,10 +241,9 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="followerModalLabel">Followers</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <ul>
+                <ul class="text">
                     {% for follower_username in follower_list %}
                         <li>{{ follower_username }}</li>
                     {% empty %}
@@ -74,7 +252,7 @@
                 </ul>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
@@ -86,10 +264,9 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="followingModalLabel">Following</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <ul>
+                <ul class="text">
                     {% for following_username in following_list %}
                         <li>{{ following_username }}</li>
                     {% empty %}
@@ -98,45 +275,143 @@
                 </ul>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
 </div>
 
-<div class="row">
-    {% for post in user_other.post.all %}
-    <div>
-        {% if user_other.user_profile.profile_pic %}
-        <a href="">
-            <img src="/media/{{ user_other.user_profile.profile_pic }}" width="40px" height="40px" class="rounded-circle"> {{ user_other.username }}
-        </a>
-        {% else %}
-        <a href="">
-            <img src="/media/default.png" width="40px" height="40px" class="rounded-circle"> {{ user_other.username }}
-        </a>
-        {% endif %}
-        <br>
+<div class="row text">
+    <div class="col-sm-1"></div>
+    <div class="col-sm-4">
+        <div class="profileinfo">
+            {% if user_other.user_profile.present_address %}
+              <div class="row info">
+                <div class="col-sm-1">
+                  <i class="fa-solid fa-house-chimney"> </i>
+                </div>
+                <div class="col-sm-11"> 
+                  Lives in  <p class="bold">{{user_other.user_profile.present_address}}</p>
+                </div>
+              </div>
+            {% endif %}
+            {% if user_other.user_profile.permanent_address %}
+                <div class="row info">
+                <div class="col-sm-1">
+                  <i class="fa-solid fa-location-dot"></i> 
+                </div>
+                <div class="col-sm-11">
+                  From <p class="bold">{{user_other.user_profile.permanent_address}}</p>
+                </div>
+                </div>
+            {% endif %}
+            {% if user_other.user_profile.dob %}
+                <div class="row info">
+                  <div class="col-sm-1">
+                    <i class="fa-solid fa-calendar-days"></i>
+                  </div>
+                  <div class="col-sm-11"> 
+                    Date of Birth - <p class="bold">{{user_other.user_profile.dob}}</p>
+                  </div>
+                </div>
+            {% endif %}
+            {% if user_other.user_profile.facebook %}
+                <div class="row info">
+                  <div class="col-sm-1">
+                    <i class="fa-brands fa-facebook"></i> 
+                  </div>
+                  <div class="col-sm-11">
+                    Facebook <p class="bold">{{user_other.user_profile.facebook}}</p>
+                  </div>
+                  
+                </div>
+            {% endif %}
+            {% if user_other.user_profile.website %}
+                <div class="row info">
+                  <div class="col-sm-1">
+                    <i class="fa-solid fa-link"></i> 
+                  </div>
+                  <div class="col-sm-11">
+                    Other Links <p class="bold">{{user_other.user_profile.website}}</p>
+                  </div>
+                </div>
+            {% endif %}
+            
+        </div>
+        <div>
+           <footer>
+                <div class="footer-content">
+                  <div class="footer-section">
+                    <h4>About Us</h4>
+                    <p class="description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce at eros euismod, lobortis arcu et, commodo enim.</p>
+                  </div>
+                  <div class="footer-section">
+                    <h4>Contact</h4>
+                    <p class="description">Email: info@example.com</p>
+                    <p class="description">Phone: 123-456-7890</p>
+                  </div>
+                  <div class="footer-section">
+                    <h4>Follow Us</h4>
+                    <div class="social-media-icons">
+                      <a href="https://www.facebook.com"><i class="fab fa-facebook"></i></a>
+                      <a href="https://www.twitter.com"><i class="fab fa-twitter"></i></a>
+                      <a href="https://www.instagram.com"><i class="fab fa-instagram"></i></a>
+                      <a href="https://www.linkedin.com/"><i class="fab fa-linkedin"></i></a>
+                    </div>
+                  </div>
+                </div>
+                <div class="footer-bottom">
+                  <p> <a href="/">FriendCircle</a> &copy; Copyright 2023.</p>
+                </div>
+              </footer>  
+        </div>
+           
     </div>
-    <div class="crop">
-        <p>{{ post.caption }}</p>
-        <img src="/media/{{ post.image }}" class="" title="{{ post.caption }}">
-        
-        <div style="padding: 20px;">
+    <div class="col-sm-6">
+        <div class="posts">
+        {% for post in user_other.post.all %}
+        <div class="row">
+            <div class="col-sm-2 pic">
+                {% if user_other.user_profile.profile_pic %}
+                <a href="#">
+                    <img src="/media/{{user_other.user_profile.profile_pic}}" width="70px" height="70px" class="rounded-circle"> 
+                </a>
+                {% else %}
+                <a href="#">
+                    <img src="/media/default.png" width="70px" height="70px" class="rounded-circle"> 
+                </a>
+                {% endif %}
+            </div>
+            <div class="col-sm-9 ">
+                <div class="bg-text">{{user_other.username}}</div>
+                <div class="sm-text">{{post.upload_date}}</div>
+            </div>
+            <br>
+        </div>
+        <div class="crop">
+          <p>{{ post.caption }}</p>
+            <a href="{% url 'App_Post:post_details' post_id=post.pk %}"><img src="/media/{{ post.image }}" class="" title="{{ post.caption }}"></a>
+          <div style="padding: 20px;">
             {% if post.pk in liked_post_list %}
-              <a href="{% url 'App_Post:unlike' pk=post.pk %}"><i class="fa fa-heart" style="font-size: 36px;"></i></a>
+              <a href="{% url 'App_Post:unlike' pk=post.pk %}"><i class="fa fa-heart" style="font-size: 36px; color:black;"></i></a>
             {% else %}
-              <a href="{% url 'App_Post:liked' pk=post.pk %}"><i class="fa fa-heart-o" style="font-size: 36px;"></i></a>
+              <a href="{% url 'App_Post:liked' pk=post.pk %}"><i class="fa fa-heart-o" style="font-size: 36px; color:white;"></i></a>
             {% endif %}
             &nbsp; &nbsp; &nbsp;
-            <a href="{% url 'App_Post:post_details' post_id=post.pk %}"><i class="fa-regular fa-comment" style="font-size: 36px;"></i> </a>
-            <br>{{ post.liked_post.count }} Likes <br>
-            <a href="{% url 'App_Post:post_details' post_id=post.pk %}">View all {{ post.comments.count }} Comments</a>
+            <a href="{% url 'App_Post:post_details' post_id=post.pk %}"><i class="fa-regular fa-comment" style="font-size: 36px; color:white;"></i> </a>
+            <br><p class="pic"></p>{{ post.liked_post.count }} Likes <br>
+            <a href="{% url 'App_Post:post_details' post_id=post.pk %}" class="text">View all {{ post.comments.count }} Comments</a>
             
           </div>
-    </div>
-    <br>
+        </div>
+        <hr>
     {% endfor %}
+    
+</div>
+    </div>
+    <div class="col-sm-1">
+
+    </div>
 </div>
 <br><br>
 {% endblock %}

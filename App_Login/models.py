@@ -7,6 +7,8 @@ class UserProfile(models.Model):
     profile_pic = models.ImageField(upload_to='profile_pics',blank=True)
     description = models.TextField(blank=True)
     full_name = models.CharField(max_length=264,blank=True)
+    permanent_address = models.CharField(max_length=264,blank=True)
+    present_address = models.CharField(max_length=264,blank=True)
     dob = models.DateField(blank=True,null=True)
     website=models.URLField(blank=True)
     facebook = models.URLField(blank=True)
