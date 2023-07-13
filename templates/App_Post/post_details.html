@@ -5,66 +5,155 @@
 
 {% block css_block %}
 <style>
-  /* Add your custom CSS styles here */
+  a{
+    text-decoration:none;
+    font-weight: 900;
+    color:white;
+  }
+  .date{
+    font-size: small;
+    font-weight: 300;
+    color: rgb(198, 198, 198);
+  }
+  .pic {
+    background-color: #434040;
+    border-radius: 10px;
+    width: 980px;
+    height: 680px;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .pic img {
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+  }
+  
+  
+  .posts{
+    background-color: #434040;
+    border-radius: 10px;
+    padding: 15px;
+  }
+  .tcolor{
+    color: white;
+  }
+  .content{
+    background-color: #545353;
+    padding: 5px;
+    margin: 5px;
+    border-radius: 5px;
+  }
+  hr{
+    height: 1px;
+    color: azure;
+  }
+  .btns{
+    padding-left:20px;
+    margin-left:38px;
+    padding-right: 20px;
+  }
+  .decoration{
+    font-weight: 300;
+    color: #c2c2c2;
+  }
+  .navbar {
+    display: none;
+  }
+  body{
+    margin-top: -85px;
+  }
 </style>
 {% endblock %}
 
 {% block body_block %}
   <div class="row">
     <div class="col-sm-9">
+      <div class="pic">
+        <img src="{{ post.image.url }}" >
+      </div>
+    </div>
+    <div class="col-sm-3">
       <div class="posts">
         <div class="profile_link">
-          <div class="row">
-            <div class="col-sm-1">
-              {% if post.author.user_profile.profile_pic %}
-                <a href="{% url 'App_Login:user' username=post.author %}">
-                  <img src="/media/{{ post.author.user_profile.profile_pic }}" width="70px" height="70px" class="rounded-circle">
-                </a>
-              {% else %}
-                <a href="{% url 'App_Login:user' username=post.author %}">
-                  <img src="/media/default.png" width="70px" height="70px" class="rounded-circle">
-                </a>
-              {% endif %}
-            </div>
-            <div class="col-sm-11">
+        <div class="row">
+          <div class="col-sm-3">
+            {% if post.author.user_profile.profile_pic %}
+              <a href="{% url 'App_Login:user' username=post.author %}">
+                <img src="/media/{{ post.author.user_profile.profile_pic }}" width="50px" height="50px" class="rounded-circle">
+              </a>
+            {% else %}
+              <a href="{% url 'App_Login:user' username=post.author %}">
+                <img src="/media/default.png" width="50px" height="50px" class="rounded-circle">
+              </a>
+            {% endif %}
+          </div>
+          <div class="col-sm-8">
+            <div class="text">
               <a href="{% url 'App_Login:user' username=post.author %}">{{ post.author }}</a>
-              <br>
-              {{ post.upload_date }}
             </div>
+            <div class="date">{{ post.upload_date }}</div>
           </div>
         </div>
         <div style="padding: 10px 20px;">
-          <p>{{ post.caption }}</p>
-        </div>
-        <img src="{{ post.image.url }}" width="100%">
-        <div style="padding: 20px;">
-          <!-- Display likes count -->
-          {{ post.liked_post.count }} Likes
-          <!-- Display comments count -->
-          {{ post.comments.count }} Comments
-        </div>
-
-        <!-- Add Comment Section -->
-        <div>
-          <form method="POST" action="{% url 'App_Post:add_comment' post_id=post.pk %}">
-            {% csrf_token %}
-            <textarea name="content" placeholder="Write a comment..." rows="2"></textarea>
-            <button type="submit" class="btn btn-primary">Comment</button>
-          </form>
-          {% for comment in post.comments.all %}
-            <div>
-            {% if comment.author.user_profile.profile_pic  %}
-              <img src="/media/{{ comment.author.user_profile.profile_pic }}" width="40px" height="40px" class="rounded-circle">
-            {% else %}
-                <img src="/media/default.png" width="40px" height="40px" class="rounded-circle">
-            {% endif %}
-
-              <strong>{{ comment.author.username }}</strong>: {{ comment.content }} <br>
-              {{ comment.timestamp }}
-            </div>
-          {% endfor %}
+          <p class="tcolor">{{ post.caption }}</p>
         </div>
       </div>
+      <div class="tcolor">
+        <div style="padding-left:10px; margin-left:38px;" class="decoration">
+          {{ post.liked_post.count }} Likes 
+          &nbsp; &nbsp; &nbsp;
+          &nbsp; &nbsp; &nbsp;
+          &nbsp; 
+          {{ post.comments.count }} Comments
+        </div>
+        <hr>
+        <div class="">
+          {% if post.pk in liked_post_list %}
+            <a href="{% url 'App_Post:unlike' pk=post.pk %}" >
+                <i class="fa fa-heart btns" style="font-size: 26px;color: rgb(0, 0, 0);"></i>
+            </a>
+          {% else %}
+            <a href="{% url 'App_Post:liked' pk=post.pk %}"><i class="fa fa-heart-o btns" style="font-size: 26px;color: rgb(255, 255, 255);"></i></a>
+          {% endif %}
+          &nbsp; &nbsp; &nbsp;
+          <a href="{% url 'App_Post:post_details' post_id=post.pk %}"><i class="fa-regular fa-comment btns" style="font-size: 26px;color: rgb(255, 255, 255);"></i>
+           </a>
+        </div>
+          
+        <hr>
+        {% for comment in post.comments.all %}
+          <div class="row">
+            <div class="col-sm-2" style="padding:10px;">
+              {% if comment.author.user_profile.profile_pic  %}
+                <img src="/media/{{ comment.author.user_profile.profile_pic }}" width="40px" height="40px" class="rounded-circle">
+              {% else %}
+                <img src="/media/default.png" width="40px" height="40px" class="rounded-circle">
+              {% endif %}
+            </div>
+            <div class="col-sm-8 content">
+              <div class="tcolor">
+                <strong >{{ comment.author.username }}</strong> 
+              </div>
+              <div class="tcolor ">
+                 {{ comment.content }}
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+        <form method="POST" action="{% url 'App_Post:add_comment' post_id=post.pk %}">
+          {% csrf_token %}
+          <textarea name="content" placeholder="Write a comment..." rows="2"></textarea>
+          <button type="submit" class="btn btn-primary">Comment</button>
+        </form>
+      </div>
+      </div>
+      
     </div>
   </div>
 {% endblock %}

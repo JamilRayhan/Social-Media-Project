@@ -168,8 +168,11 @@ def edit_post(request, post_id):
 @login_required
 def post_details(request, post_id):
     post = get_object_or_404(Posts, pk=post_id)
+    liked_post = Like.objects.filter(user=request.user)
+    liked_post_list = liked_post.values_list('post', flat=True)
     context = {
         'post': post,
+        'liked_post_list':liked_post_list,
         **base_context(request)
     }
     return render(request, 'App_Post/post_details.html', context)
