@@ -11,15 +11,23 @@
   }
   
   .unread-notification {
+    border-radius: 10px;
     padding: 10px;
     border-bottom: 1px solid #ccc;
-    background-color: #828282;  
+    background-color: #484848;  
+  }
+  body{
+    color:white;
+    text-decoration: none;
+  }
+  a{
+    text-decoration: none;
   }
 </style>
 {% endblock %}
 
 {% block body_block %}
-  <h1>Notifications</h1>
+  <h2>Notifications</h2>
   {% if notifications %}
     <ul>
       {% for notification in unread_notifications %}
@@ -44,10 +52,10 @@
           <li class="notification">
             {% if notification.notification_type == 'Like' %}
               <strong>{{ notification.target.username }}</strong> liked your post:
-              <a href="{% url 'App_Post:post_details' post_id=notification.post.pk %}">{{ notification.post.caption }}</a>
+              <a href="{% url 'App_Post:post_details' post_id=notification.post.pk %}">{{ notification.post.caption|linebreaksbr|truncatechars_html:28  }}</a>
             {% elif notification.notification_type == 'Comment' %}
               <strong>{{ notification.target.username }}</strong> commented on your post:
-              <a href="{% url 'App_Post:post_details' post_id=notification.post.pk %}">{{ notification.post.caption }}</a>
+              <a href="{% url 'App_Post:post_details' post_id=notification.post.pk %}">{{ notification.post.caption|linebreaksbr|truncatechars_html:28  }}</a>
               <br>
               Comment: {{ notification.comment.content }}
             {% elif notification.notification_type == 'Follow' %}

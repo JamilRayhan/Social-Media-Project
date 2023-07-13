@@ -5,16 +5,28 @@
 
 {% block css_block %}
 <style>
+  body{
+    color:white;
+  }
+  a{
+    text-decoration: none;
+  }
   .unread-message {
     padding: 10px;
-    border-bottom: 1px solid #ccc;
-    background-color: #828282;  
+    border-radius: 10px;
+    border-bottom: 1px solid hwb(0 80% 20%);
+    background-color: #484848;  
+  }
+  .date{
+    font-size: 15px;
+    font-weight: 500;
+    color: #a4a4a4;
   }
 </style>
 {% endblock  %}
 
 {% block body_block %} 
-<h1>Inbox</h1>
+<h2>Inbox</h2>
 
 {% if received_messages %}
 <ul>
@@ -24,9 +36,11 @@
     {% else %}
       <li>
     {% endif %}
-    <strong>From:</strong> {{ message.sender.username }}<br>
-    <strong>Date:</strong> {{ message.timestamp }}<br>
-    <strong>Content:</strong> {{ message.content }}<br>
+    <strong>{{ message.sender.username }}</strong>  : {{ message.content|linebreaksbr|truncatechars_html:10}}<br>
+    <div class="date">
+      {{ message.timestamp }}<br>
+    </div>
+    
     <a href="{% url 'App_Message:conversation' user.username message.sender.username %}">View Conversation</a>
   </li>
   {% endfor %}
