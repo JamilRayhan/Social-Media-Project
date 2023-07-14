@@ -1,7 +1,7 @@
 {% extends 'navbar.html' %}
 {% load crispy_forms_tags %}
 
-{% block title_block %}Conversation{% endblock %}
+{% block title_block %} Conversation | FriendCircle{% endblock %}
 
 {% block css_block %}
 <style>
@@ -30,7 +30,7 @@
 {% endblock %}
 
 {% block body_block %}
-<h1 class="other_user">{{ user2.username }}</h1>
+<h1 class="other_user">{{ user2.username }} </h1>
 
 {% for message in messages %}
     {% if message.sender == user1 %}
@@ -40,9 +40,13 @@
         </div>
     {% else %}
         <div class="message received">
-            <p>{% if message.sender.user_profile.profile_pic %}<img src="{{message.sender.user_profile.profile_pic.url }}" alt="Profile Pic" class="profile-pic">{% endif %}
-           {{ message.content }}</p>
-            <span>{{ message.timestamp }}</span>
+            <p>{% if message.sender.user_profile.profile_pic %}
+                <img src="{{message.sender.user_profile.profile_pic.url }}" alt="Profile Pic" class="profile-pic">
+                {%else%}
+                <img src="/media/default.png" alt="Profile Pic" class="profile-pic">
+                {% endif %}
+                {{ message.content }}</p>
+                <span>{{ message.timestamp }}</span>
         </div>
     {% endif %}
 {% endfor %}

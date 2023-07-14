@@ -36,7 +36,7 @@ class AuthForm(AuthenticationForm):
         
         
 class EditProfile(forms.ModelForm):
-    dob=forms.DateField(widget=forms.TextInput(attrs={'type':'date'}))
+    date_of_birth=forms.DateField(widget=forms.TextInput(attrs={'type':'date'}))
     class Meta:
         model= UserProfile
         exclude = ('user',)

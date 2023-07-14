@@ -1,19 +1,105 @@
 {% extends 'navbar.html' %}
 {% load crispy_forms_tags %}
-{% block title_block %}{{title}}{% endblock  %}
+{% block title_block %}{{title}} | FriendCircle{% endblock  %}
 
 {% block css_block %}
-
+<style>
+    body{
+        color: white;
+    }
+    footer { 
+        margin: 10px;
+        margin-top: 15px;
+        background-color: #3e3e47;
+        padding: 20px;
+        color: #ffffff;
+        border-radius: 10px;
+      }
+      
+      .footer-content {
+        text-align: center;
+        margin: 0 auto;
+      }
+      
+      .footer-section {
+        width: 100%;
+        margin-bottom: 20px;
+      }
+      
+      .footer-section h4 {
+        margin-bottom: 10px;
+      }
+      .description{
+        font-size: 15px;
+        letter-spacing: 0.5px;
+        color: #d8d8d8;
+    }
+      .social-media-icons a {
+        color: #000000;
+        font-size: 24px;
+        margin-right: 10px;
+      }
+      
+      .footer-bottom {
+        background-color: #4d4b4b;
+        padding: 10px 0;
+        text-align: center;
+        border-radius: 10px;
+      }
+      .bgc{
+        background-color: #3e3e47;
+        border-radius: 10px;
+        padding: 20px;
+        padding-top: 30px;
+        margin-top: 15px;
+      }
+</style>
 {% endblock  %}
-
+ 
 {% block body_block %}
 <center>
-<div >
-<form method='POST' enctype="multipart/form-data">
-    {{form|crispy}}
-    {% csrf_token %}
-    <button type="submit" class="btn btn-primary btn-sm">Submit</button>
-</form>
+<div class="row" >
+    <div class="col-sm-1">
+
+    </div>
+    <div class="col-sm-6 bgc">
+    <form method='POST' enctype="multipart/form-data">
+        {{form|crispy}}
+        {% csrf_token %}
+        <button type="submit" class="btn btn-primary btn-sm">Submit</button>    
+    </form>
+    <br><br>
+    </div>
+    <div class="col-sm-5">
+        <div>
+            <footer>
+                 <div class="footer-content">
+                   <div class="footer-section">
+                     <h4>About Us</h4>
+                     <p class="description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce at eros euismod, lobortis arcu et, commodo enim.</p>
+                   </div>
+                   <div class="footer-section">
+                     <h4>Contact</h4>
+                     <p class="description">Email: info@example.com</p>
+                     <p class="description">Phone: 123-456-7890</p>
+                   </div>
+                   <div class="footer-section">
+                     <h4>Follow Us</h4>
+                     <div class="social-media-icons">
+                       <a href="https://www.facebook.com"><i class="fab fa-facebook"></i></a>
+                       <a href="https://www.twitter.com"><i class="fab fa-twitter"></i></a>
+                       <a href="https://www.instagram.com"><i class="fab fa-instagram"></i></a>
+                       <a href="https://www.linkedin.com/"><i class="fab fa-linkedin"></i></a>
+                     </div>
+                   </div>
+                 </div>
+                 <div class="footer-bottom">
+                   <p> <a href="/">FriendCircle</a> &copy; Copyright 2023.</p>
+                 </div>
+               </footer>  
+         </div>
+    </div>
+
 </div>
 </center>
 {% endblock  %}

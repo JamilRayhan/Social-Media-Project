@@ -1,20 +1,23 @@
 {% extends 'navbar.html' %}
 {% load crispy_forms_tags %}
 
-{% block title_block %}Notifications{% endblock %}
+{% block title_block %}Notifications | FriendCircle{% endblock %}
 
 {% block css_block %}
 <style>
   .notification {
     padding: 10px;
+    margin: 5px;
     border-bottom: 1px solid #ccc;
+    border-radius: 10px;
   }
   
   .unread-notification {
     border-radius: 10px;
     padding: 10px;
+    margin: 5px;
     border-bottom: 1px solid #ccc;
-    background-color: #484848;  
+    background-color: #848484;  
   }
   body{
     color:white;
@@ -23,51 +26,146 @@
   a{
     text-decoration: none;
   }
+  .all{
+    background-color: #3e3e47;
+    border-radius: 10px;
+  }
+  footer { 
+    margin: 5px;
+    background-color: #3e3e47;
+    padding: 10px;
+    color: #ffffff;
+    border-radius: 10px;
+  }
+  
+  .footer-content {
+    text-align: center;
+    margin: 0 auto;
+  }
+  
+  .footer-section {
+    width: 100%;
+    margin-bottom: 20px;
+  }
+  
+  .footer-section h4 {
+    margin-bottom: 10px;
+  }
+  .description{
+    font-size: 15px;
+    letter-spacing: 0.5px;
+    color: #d8d8d8;
+}
+  .social-media-icons a {
+    color: #000000;
+    font-size: 24px;
+    margin-right: 10px;
+  }
+  
+  .footer-bottom {
+    background-color: #4d4b4b;
+    padding: 10px 0;
+    text-align: center;
+    border-radius: 10px;
+  }
+  .text a{
+    color: white;
+  }
+  .settings{
+    background-color: #3e3e47;
+    border-radius: 10px;
+    padding: 10px;
+    margin: 10px;
+    margin-top: 5px;
+  }
 </style>
 {% endblock %}
 
 {% block body_block %}
   <h2>Notifications</h2>
-  {% if notifications %}
-    <ul>
+  <div class="row">
+    <div class="col-sm-3">
+      <div class="settings">
+        Manage your notifications <br>
+        <a href="/settings/"> View settings </a>
+      </div>
+    </div>
+    <div class="col-sm-6">
+      {% if notifications %}
+    <div class="all text">
       {% for notification in unread_notifications %}
-        <li class="unread-notification">
+        <div class="unread-notification">
           {% if notification.notification_type == 'Like' %}
+          <a href="{% url 'App_Post:post_details' post_id=notification.post.pk %}">
             <strong>{{ notification.target.username }}</strong> liked your post:
-            <a href="{% url 'App_Post:post_details' post_id=notification.post.pk %}">{{ notification.post.caption }}</a>
+            {{ notification.post.caption|linebreaksbr|truncatechars_html:28 }}</a>
           {% elif notification.notification_type == 'Comment' %}
+          <a href="{% url 'App_Post:post_details' post_id=notification.post.pk %}">
             <strong>{{ notification.target.username }}</strong> commented on your post:
-            <a href="{% url 'App_Post:post_details' post_id=notification.post.pk %}">{{ notification.post.caption }}</a>
-            <br>
-            Comment: {{ notification.comment.content }}
+            {{ notification.post.caption|linebreaksbr|truncatechars_html:28 }}</a>
           {% elif notification.notification_type == 'Follow' %}
             <a href="{% url 'App_Login:user' username=notification.target.username %}">
               <strong>{{ notification.target.username }}</strong> started following you.
             </a>
           {% endif %}
-        </li>
+          </div>
       {% endfor %}
       {% for notification in notifications %}
         {% if notification not in unread_notifications %}
-          <li class="notification">
+          <div class="notification">
             {% if notification.notification_type == 'Like' %}
+            <a href="{% url 'App_Post:post_details' post_id=notification.post.pk %}">
               <strong>{{ notification.target.username }}</strong> liked your post:
-              <a href="{% url 'App_Post:post_details' post_id=notification.post.pk %}">{{ notification.post.caption|linebreaksbr|truncatechars_html:28  }}</a>
+              {{ notification.post.caption|linebreaksbr|truncatechars_html:28  }}</a>
             {% elif notification.notification_type == 'Comment' %}
-              <strong>{{ notification.target.username }}</strong> commented on your post:
-              <a href="{% url 'App_Post:post_details' post_id=notification.post.pk %}">{{ notification.post.caption|linebreaksbr|truncatechars_html:28  }}</a>
-              <br>
-              Comment: {{ notification.comment.content }}
+              <a href="{% url 'App_Post:post_details' post_id=notification.post.pk %}"><strong>{{ notification.target.username }}</strong>  commented on your post:
+              {{ notification.post.caption|linebreaksbr|truncatechars_html:28  }}</a>
+            
             {% elif notification.notification_type == 'Follow' %}
               <a href="{% url 'App_Login:user' username=notification.target.username %}">
                 <strong>{{ notification.target.username }}</strong> started following you.
               </a>
             {% endif %}
-          </li>
+            </div>
         {% endif %}
       {% endfor %}
-    </ul>
+          </div>
   {% else %}
     <p>No new notifications.</p>
   {% endif %}
+    </div>
+    <div class="col-sm-3">
+      <div>
+        <footer>
+             <div class="footer-content">
+               <div class="footer-section">
+                 <h4>About Us</h4>
+                 <p class="description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce at eros euismod, lobortis arcu et, commodo enim.</p>
+               </div>
+               <div class="footer-section">
+                 <h4>Contact</h4>
+                 <p class="description">Email: info@example.com</p>
+                 <p class="description">Phone: 123-456-7890</p>
+               </div>
+               <div class="footer-section">
+                 <h4>Follow Us</h4>
+                 <div class="social-media-icons">
+                   <a href="https://www.facebook.com"><i class="fab fa-facebook"></i></a>
+                   <a href="https://www.twitter.com"><i class="fab fa-twitter"></i></a>
+                   <a href="https://www.instagram.com"><i class="fab fa-instagram"></i></a>
+                   <a href="https://www.linkedin.com/"><i class="fab fa-linkedin"></i></a>
+                 </div>
+               </div>
+             </div>
+             <div class="footer-bottom">
+               <p> <a href="/">FriendCircle</a> &copy; Copyright 2023.</p>
+             </div>
+           </footer>  
+     </div>
+    </div>
+    <div>
+
+    </div>
+  </div>
+  
 {% endblock %}

@@ -1,7 +1,7 @@
 {% extends 'navbar.html' %}
 {% load crispy_forms_tags %}
 
-{% block title_block %}{{ title }}{% endblock  %}
+{% block title_block %}Messenger | FriendCircle{% endblock  %}
 
 {% block css_block %}
 <style>
@@ -19,8 +19,24 @@
   }
   .date{
     font-size: 15px;
-    font-weight: 500;
+    font-weight: 300;
     color: #a4a4a4;
+  }
+  .profile-pic {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+  }
+  .row{
+    margin: 10px;
+    padding: 10px;
+    background-color: #323439;
+    border-radius: 10px;
+  }
+  .msg{
+    font-size: 15px;
+    font-weight: 400;
+    color: #ffffff;
   }
 </style>
 {% endblock  %}
@@ -28,25 +44,39 @@
 {% block body_block %} 
 <h2>Inbox</h2>
 
-{% if received_messages %}
-<ul>
-  {% for message in received_messages %}
-    {% if message.is_new %}
-      <li class='unread-message'>
-    {% else %}
-      <li>
-    {% endif %}
-    <strong>{{ message.sender.username }}</strong>  : {{ message.content|linebreaksbr|truncatechars_html:10}}<br>
-    <div class="date">
-      {{ message.timestamp }}<br>
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-sm-12">
+      {% if received_messages %}
+        {% for message in received_messages %}
+          <div class="row">
+            <div class="col-sm-1">
+              {% if message.sender.user_profile.profile_pic %}
+                <img src="{{ message.sender.user_profile.profile_pic.url }}" alt="Profile Pic" class="profile-pic">
+              {% else %}
+                <img src="/media/default.png" alt="Profile Pic" class="profile-pic">
+              {% endif %}
+            </div>
+            <div class="col-sm-6">
+              {% if message.is_new %}
+                <div class='unread-message'>
+              {% else %}
+                <div>
+              {% endif %}
+                  <strong>{{ message.sender.username }}</strong> <br>
+                  <div class="msg">
+                  {{ message.content|linebreaksbr|truncatechars_html:10}}.
+                  <span class="date">{{ message.timestamp|timesince }}</span>
+                  </div>
+                  <a href="{% url 'App_Message:conversation' user.username message.sender.username %}">View Conversation</a>
+                  </div>
+                </div>
+          </div>
+        {% endfor %}
+      {% else %}
+        <p>Your inbox is empty.</p>
+      {% endif %}
     </div>
-    
-    <a href="{% url 'App_Message:conversation' user.username message.sender.username %}">View Conversation</a>
-  </li>
-  {% endfor %}
-</ul>
-{% else %}
-<p>Your inbox is empty.</p>
-{% endif %}
-
+  </div>
+</div>
 {% endblock %}
