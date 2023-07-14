@@ -6,68 +6,87 @@
 {% block css_block %}
 <style>
   a{
-    text-decoration:none;
-    font-weight: 900;
-    color:white;
+  text-decoration:none;
+  font-weight: 900;
+  color:white;
   }
   .date{
-    font-size: small;
-    font-weight: 300;
-    color: rgb(198, 198, 198);
+  font-size: small;
+  font-weight: 300;
+  color: rgb(198, 198, 198);
   }
   .pic {
-    background-color: #3e3e47;
-    border-radius: 10px;
-    width: 980px;
-    height: 680px;
-    box-sizing: border-box;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  background-color: #3e3e47;
+  border-radius: 10px;
+  width: 980px;
+  height: 680px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   }
-  
+
   .pic img {
-    max-width: 100%;
-    max-height: 100%;
-    width: auto;
-    height: auto;
-    object-fit: contain;
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
   }
-  
-  
+
+
   .posts{
-    background-color: #3e3e47;
-    border-radius: 10px;
-    padding: 15px;
+  background-color: #3e3e47;
+  border-radius: 10px;
+  padding: 15px;
   }
   .tcolor{
-    color: white;
+  color: white;
   }
   .content{
-    background-color: #545353;
-    padding: 5px;
-    margin: 5px;
-    border-radius: 5px;
+  background-color: #545353;
+  padding: 5px;
+  margin: 5px;
+  border-radius: 5px;
   }
   hr{
-    height: 1px;
-    color: azure;
+  height: 1px;
+  color: azure;
   }
   .btns{
-    padding-left:20px;
-    margin-left:38px;
-    padding-right: 20px;
+  padding-left:20px;
+  margin-left:38px;
+  padding-right: 20px;
   }
   .decoration{
-    font-weight: 300;
-    color: #c2c2c2;
+  font-weight: 300;
+  color: #c2c2c2;
   }
   .navbar {
-    display: none;
+  display: none;
   }
   body{
-    margin-top: -85px;
+  margin-top: -85px;
   }
+  .comment{
+  background-color: #282121;
+  padding: 5px;
+  margin: 5px;
+    margin-top:15px;
+  border-radius: 5px;
+  width:100%;
+  }
+  .button{
+  text-align:center;
+    padding:20px;
+    padding-top:0;
+    margin-bottom:20px;
+  }
+  .scrollable {
+    height: 680px;
+    overflow-y: scroll;
+  }
+
 </style>
 {% endblock %}
 
@@ -78,7 +97,7 @@
         <img src="{{ post.image.url }}" >
       </div>
     </div>
-    <div class="col-sm-3">
+    <div class="col-sm-3 scrollable">
       <div class="posts">
         <div class="profile_link">
         <div class="row">
@@ -109,7 +128,7 @@
           {{ post.liked_post.count }} Likes 
           &nbsp; &nbsp; &nbsp;
           &nbsp; &nbsp; &nbsp;
-          &nbsp; 
+          &nbsp;
           {{ post.comments.count }} Comments
         </div>
         <hr>
@@ -146,11 +165,15 @@
             </div>
           </div>
         {% endfor %}
+
         <form method="POST" action="{% url 'App_Post:add_comment' post_id=post.pk %}">
           {% csrf_token %}
-          <textarea name="content" placeholder="Write a comment..." rows="2"></textarea>
-          <button type="submit" class="btn btn-primary">Comment</button>
+          <textarea name="content" placeholder="Write a comment..." rows="2" class="comment"></textarea>
+          <div class="button">
+            <button type="submit" class="btn btn-primary">Comment</button>
+          </div>
         </form>
+
       </div>
       </div>
       

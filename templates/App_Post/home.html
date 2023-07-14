@@ -37,7 +37,7 @@
     height: 120px;
     display: block;
     margin: 10px auto;
-    
+
   }
   .text{
     color: aliceblue;
@@ -65,34 +65,34 @@
     color: #ffffff;
     border-radius: 10px;
   }
-  
+
   .footer-content {
     text-align: center;
     margin: 0 auto;
   }
-  
+
   .footer-section {
     width: 100%;
     margin-bottom: 20px;
   }
-  
+
   .footer-section h4 {
     margin-bottom: 10px;
   }
-  
+
   .social-media-icons a {
     color: #000000;
     font-size: 24px;
     margin-right: 10px;
   }
-  
+
   .footer-bottom {
     background-color: #4d4b4b;
     padding: 10px 0;
     text-align: center;
     border-radius: 10px;
   }
-  
+
   .people{
     margin-bottom: 10px;
     padding: 10px;
@@ -116,21 +116,22 @@
     background-color: #f8f9fa;
     border: 1px solid #dee2e6;
     border-radius: 10px;
-    padding-left: 200px;
-    padding-right: 200px;
+    padding-right:170px;
+    padding-left:170px;
     padding-top: 20px;
     padding-bottom: 20px;
     display: flex;
     align-items: center;
     justify-content: center;
     color: #000000;
+    width: 100%;
   }
-  
+
   .post-box i {
     font-size: 24px;
     margin-right: 5px;
   }
-  
+
   .post-box span {
     font-weight: bold;
   }
@@ -194,6 +195,13 @@
   height: 50px;
   border-top: none;
 }
+   .scrollable {
+    height: 1200px;
+    overflow-y: scroll;
+  }
+  .postpic{
+  padding-top:15px;
+  }
 </style>
 {% endblock %}
 
@@ -212,22 +220,35 @@
               {{ request.user.user_profile.description|linebreaks }}
             </div>
             <hr>
-            Connections : {{ request.user.following.count }} 
+            Connections : {{ request.user.following.count }}
           </div>
       </div>
     </div>
-    <div class="col-sm-6">
-      
+    <div class="col-sm-6 scrollable ">
+
       <div class="container mt-3">
-        {% if request.user.user_profile.profile_pic %}
-          <a href="{% url 'App_Login:user' username=request.user.username %}">
+        <div class="row">
+          <div class="col-sm-2 postpic">
+            {% if request.user.user_profile.profile_pic %}
+            <a href="{% url 'App_Login:user' username=request.user.username %}">
             <img src="/media/{{ request.user.user_profile.profile_pic }}" width="70px" height="70px" class="rounded-circle">
-          </a>
-        {% else %}
-          <a href="{% url 'App_Login:user' username=request.user.username %}">
+            </a>
+            {% else %}
+            <a href="{% url 'App_Login:user' username=request.user.username %}">
             <img src="/media/default.png" width="70px" height="70px" class="rounded-circle">
-          </a>
+            </a>
         {% endif %}
+          </div>
+          <div class="col-sm-9">
+            <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#myModal">
+          <div class="post-box">
+            <i class="fas fa-plus"></i>
+            <span>Post Photo</span>
+          </div>
+        </button>
+          </div>
+        </div>
+
         <!-- The Modal -->
         <div class="modal" id="myModal">
             <div class="modal-dialog">
@@ -261,12 +282,6 @@
                 </div>
             </div>
         </div>
-        <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#myModal">
-          <div class="post-box">
-            <i class="fas fa-plus"></i>
-            <span>Post Photo</span>
-          </div>
-        </button>
       </div>
       {% for post in posts %}
         <div class="posts">
