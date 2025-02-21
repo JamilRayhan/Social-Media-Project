@@ -54,7 +54,7 @@ MIDDLEWARE = [
 ]
 
 # ─── URL CONFIGURATION ──────────────────────────────────────────────────────────
-ROOT_URLCONF = "Social_Media_Project.urls"
+ROOT_URLCONF = "config.urls"
 
 # ─── TEMPLATES ──────────────────────────────────────────────────────────────────
 TEMPLATES_DIR = os.path.join(BASE_DIR, "templates")
@@ -76,8 +76,8 @@ TEMPLATES = [
 ]
 
 # ─── WSGI & ASGI APPLICATION ────────────────────────────────────────────────────
-WSGI_APPLICATION = "Social_Media_Project.wsgi.application"
-ASGI_APPLICATION = "Social_Media_Project.asgi.application"
+WSGI_APPLICATION = "config.wsgi.application"
+ASGI_APPLICATION = "config.asgi.application"
 
 # ─── DATABASE CONFIGURATION ─────────────────────────────────────────────────────
 DATABASES = {
