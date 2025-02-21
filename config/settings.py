@@ -32,10 +32,10 @@ INSTALLED_APPS = [
     "rest_framework",
 
     # Custom apps
-    "App_Login",
-    "App_Post",
-    "App_Settings",
-    "App_Message",
+    "apps.App_Login",
+    "apps.App_Post",
+    "apps.App_Settings",
+    "apps.App_Message",
 ]
 
 # ─── DJANGO FORM HANDLING ────────────────────────────────────────────────────────

@@ -1,8 +1,8 @@
 from django.shortcuts import HttpResponse, HttpResponseRedirect, get_object_or_404, redirect, render
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
-from App_Login.models import UserProfile, Follow
-from App_Post.models import Posts, Like, Comment, Notification
+from apps.App_Login.models import UserProfile, Follow
+from apps.App_Post.models import Posts, Like, Comment, Notification
 from django.contrib.auth.models import User
 from .forms import PostForm
 from .context_processors import base_context

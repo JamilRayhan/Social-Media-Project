@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm,AuthenticationForm
 from django.contrib.auth.models import User
-from App_Login.models import UserProfile
+from apps.App_Login.models import UserProfile
 
 class CreateNewUser(UserCreationForm):
     email = forms.EmailField(required=True, label="", widget=forms.TextInput(attrs={'placeholder':'Email'}))

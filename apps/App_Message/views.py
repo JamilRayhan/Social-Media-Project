@@ -4,7 +4,7 @@ from .models import Message
 from .forms import MessageSendForm, MessageReplyForm
 from django.contrib.auth.models import User
 from django.db.models import Q
-from App_Post.context_processors import *
+from apps.App_Post.context_processors import *
 
 @login_required
 def send_message(request, username):
@@ -14,8 +14,7 @@ def send_message(request, username):
         msg_form = MessageSendForm(request.POST)
         if msg_form.is_valid():
             content = msg_form.cleaned_data['content']
-            message = Message(sender=request.user,
-                              recipient=recipient, content=content)
+            message = Message(sender=request.user,recipient=recipient, content=content)
             message.save()
             return redirect('App_Message:inbox')
     else:
@@ -27,7 +26,7 @@ def send_message(request, username):
     }
     return render(request, 'App_Message/send_message.html',context )
 
- 
+
 @login_required
 def inbox(request):
     received_messages = Message.objects.filter(recipient=request.user)

@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class AppMessageConfig(AppConfig):
+class AppPostConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'App_Message'
+    name = 'apps.App_Post'

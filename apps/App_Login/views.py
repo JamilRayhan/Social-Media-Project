@@ -4,13 +4,13 @@ from django.contrib.auth import login, authenticate, logout
 from django.shortcuts import HttpResponseRedirect
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
-from App_Login.forms import CreateNewUser, AuthForm, EditProfile
-from App_Login.models import UserProfile, Follow
+from apps.App_Login.forms import CreateNewUser, AuthForm, EditProfile
+from apps.App_Login.models import UserProfile, Follow
 
-from App_Post.forms import PostForm
+from apps.App_Post.forms import PostForm
 from django.contrib.auth.models import User
-from App_Post.context_processors import *
-from App_Post.models import Like, Notification
+from apps.App_Post.context_processors import *
+from apps.App_Post.models import Like, Notification
 # Create your views here.
 
 

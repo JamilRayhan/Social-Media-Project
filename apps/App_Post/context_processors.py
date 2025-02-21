@@ -1,5 +1,5 @@
-from App_Message.models import Message
-from App_Post.models import Notification
+from apps.App_Message.models import Message
+from apps.App_Post.models import Notification
 
 
 def base_context(request):
