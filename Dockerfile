@@ -38,6 +38,12 @@ RUN groupadd --system --gid $GID jamil \
 
 RUN mkdir -p /app/static /app/media && chown -R jamil:jamil /app/static /app/media
 
+RUN mkdir -p /app/logs
+RUN chmod -R 777 logs
+
+RUN mkdir -p /app/static
+RUN chmod -R 777 static
+
 # Run migrations and collectstatic as root (to avoid permission issues)
 RUN python manage.py collectstatic --noinput
 RUN python manage.py migrate

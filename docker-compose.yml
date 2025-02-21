@@ -1,15 +1,16 @@
 services:
   django:
+    user: "1000:1000"
     build:
       dockerfile: Dockerfile
     volumes:
-      - ../../:/app
+      - .:/app
     ports:
       - "8000:8000"
     depends_on:
-      postgres:
-        condition: service_healthy
-        restart: true
+      # postgres:
+      #   condition: service_healthy
+      #   restart: true
       redis:
         condition: service_healthy
         restart: true
@@ -17,23 +18,25 @@ services:
       - social_media
     restart: on-failure
 
-  postgres:
-    image: postgres:17
-    environment:
-      - POSTGRES_DB=${DB_NAME}
-      - POSTGRES_USER=${DB_USER}
-      - POSTGRES_PASSWORD=${DB_PASSWORD}
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}"]
-      interval: 10s
-      retries: 5
-      start_period: 30s
-      timeout: 10s
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-    networks:
-      - social_media
-    restart: unless-stopped
+  # postgres:
+  #   image: postgres:17
+  #   environment:
+  #     - POSTGRES_DB=${DB_NAME}
+  #     - POSTGRES_USER=${DB_USER}
+  #     - POSTGRES_PASSWORD=${DB_PASSWORD}
+  #   healthcheck:
+  #     test: ["CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}"]
+  #     interval: 10s
+  #     retries: 5
+  #     start_period: 30s
+  #     timeout: 10s
+  #   volumes:
+  #     - postgres_data:/var/lib/postgresql/data
+  #   ports:
+  #     - "5432:5432" 
+  #   networks:
+  #     - social_media
+  #   restart: unless-stopped
 
   redis:
     image: redis:alpine
@@ -49,6 +52,14 @@ services:
       - social_media
     restart: unless-stopped
 
+  mailpit:
+    image: 'axllent/mailpit:latest'
+    ports:
+      - '8025:8025'
+    networks:
+      - social_media
+    restart: unless-stopped
+  
 networks:
   social_media:
     driver: bridge
